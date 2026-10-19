@@ -13,10 +13,23 @@ interface ProductCardProps {
 }
 
 const categoryColors: Record<string, { bg: string; text: string }> = {
-  Mentoria: { bg: 'bg-[#1F3A5F]/10', text: 'text-[#1F3A5F]' },
-  Curso: { bg: 'bg-[#2563EB]/10', text: 'text-[#2563EB]' },
-  'E-book': { bg: 'bg-[#E1A63E]/15', text: 'text-[#B47517]' },
-  Serviço: { bg: 'bg-emerald-50', text: 'text-emerald-700' },
+  'Produto de Entrada': {
+    bg: 'bg-blue-50 text-blue-700 border border-blue-200',
+    text: 'text-blue-700',
+  },
+  Box: { bg: 'bg-indigo-50 text-indigo-700 border border-indigo-200', text: 'text-indigo-700' },
+  Curso: {
+    bg: 'bg-[#2563EB]/10 text-[#2563EB] border border-[#2563EB]/20',
+    text: 'text-[#2563EB]',
+  },
+  Mentoria: {
+    bg: 'bg-[#1F3A5F]/10 text-[#1F3A5F] border border-[#1F3A5F]/20',
+    text: 'text-[#1F3A5F]',
+  },
+  Serviços: { bg: 'bg-amber-50 text-amber-800 border border-amber-200', text: 'text-amber-800' },
+  // Legacy safety
+  'E-book': { bg: 'bg-amber-50 text-amber-700', text: 'text-amber-700' },
+  Serviço: { bg: 'bg-emerald-50 text-emerald-700', text: 'text-emerald-700' },
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0 }) => {

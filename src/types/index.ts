@@ -1,4 +1,4 @@
-export type ProductCategory = 'Mentoria' | 'Curso' | 'E-book' | 'Serviço'
+export type ProductCategory = 'Produto de Entrada' | 'Box' | 'Curso' | 'Mentoria' | 'Serviços'
 
 export interface Product {
   id: string

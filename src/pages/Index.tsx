@@ -10,25 +10,37 @@ import {
   TrendingUp,
   Award,
   BookOpen,
-  ArrowDown,
   ArrowRight,
   Sparkles,
   ShieldCheck,
   Cpu,
-  BarChart4,
   Layers,
-  Database,
-  Sliders,
   CheckCircle2,
   Loader2,
   PackageSearch,
+  FileSpreadsheet,
+  Boxes,
+  GraduationCap,
+  Users2,
+  Briefcase,
 } from 'lucide-react'
+import { ServiceFronts } from '@/components/ServiceFronts'
 
 export default function Index() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos')
   const { isAuthenticated } = useAuth()
+
+  // Desired ordering for the product ladder
+  const ladderOrder: Record<string, number> = {
+    'planilha-modelo-faturamento-prompt-financeiro': 1,
+    'impacto-precificacao-reforma-tributaria-planilha': 2,
+    'box-analista-financeiro-modelagem': 3,
+    'curso-controladoria-estrategica': 4,
+    'mentoria-executiva': 5,
+    'servicos-consultoria-apresentacao-institucional': 6,
+  }
 
   useEffect(() => {
     let mounted = true
@@ -37,7 +49,12 @@ export default function Index() {
       try {
         const list = await getProducts()
         if (mounted) {
-          setProducts(list)
+          const sorted = [...list].sort((a, b) => {
+            const orderA = ladderOrder[a.slug] ?? 99
+            const orderB = ladderOrder[b.slug] ?? 99
+            return orderA - orderB
+          })
+          setProducts(sorted)
         }
       } catch (err) {
         console.error('Falha ao carregar catálogo:', err)
@@ -53,7 +70,7 @@ export default function Index() {
     }
   }, [])
 
-  const categories = ['Todos', 'Mentoria', 'Curso', 'E-book', 'Serviço']
+  const categories = ['Todos', 'Produto de Entrada', 'Box', 'Curso', 'Mentoria', 'Serviços']
 
   const filteredProducts =
     selectedCategory === 'Todos'
@@ -81,23 +98,48 @@ export default function Index() {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#E1A63E]" />
               <span className="text-xs font-bold tracking-widest text-slate-100 uppercase">
-                A² Strategic Solutions • Inteligência Executiva & Advisory
+                A² Strategic Solutions • Strategic Controller Advisory
               </span>
             </div>
 
-            {/* Headline with metallic / gold touches */}
+            {/* Factual Headline derived from real offerings */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.08] mb-6">
-              Finanças, governança e estratégia conectadas em uma{' '}
+              Soluções integradas em{' '}
               <span className="bg-gradient-to-r from-blue-200 via-[#E1A63E] to-amber-200 bg-clip-text text-transparent">
-                visão executiva única.
-              </span>
+                Controladoria Estratégica,
+              </span>{' '}
+              Modelagem e Gestão Financeira.
             </h1>
 
-            {/* Subheadline */}
-            <p className="max-w-2xl mx-auto text-base sm:text-xl text-slate-300 font-normal leading-relaxed mb-8">
-              Aceleramos a maturidade financeira e o valuation de grupos econômicos com mentorias
-              estratégicas, fechamento automatizado e governança padrão conselho.
+            {/* Factual Subheadline referencing real product ladder */}
+            <p className="max-w-3xl mx-auto text-base sm:text-lg text-slate-300 font-normal leading-relaxed mb-8">
+              Do produto de entrada e modelagem analítica à formação executiva e consultoria
+              estruturada nas quatro frentes de atuação corporativa.
             </p>
+
+            {/* Product ladder quick chips */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-8 max-w-2xl mx-auto text-xs">
+              <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
+                <FileSpreadsheet className="w-3.5 h-3.5 text-[#E1A63E]" />
+                Produtos de Entrada
+              </span>
+              <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
+                <Boxes className="w-3.5 h-3.5 text-blue-400" />
+                Box Modelagem
+              </span>
+              <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
+                <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
+                Curso de Controladoria
+              </span>
+              <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
+                <Users2 className="w-3.5 h-3.5 text-amber-300" />
+                Mentoria Executiva
+              </span>
+              <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
+                <Briefcase className="w-3.5 h-3.5 text-emerald-400" />
+                Serviços Institucionais
+              </span>
+            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -105,14 +147,14 @@ export default function Index() {
                 onClick={scrollToProducts}
                 className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-[#0F1E36] font-bold text-sm shadow-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2"
               >
-                <span>Explorar Soluções & Produtos</span>
-                <ArrowDown className="w-4 h-4 text-[#2563EB]" />
+                <span>Conhecer a Escada de Soluções</span>
+                <ArrowRight className="w-4 h-4 text-[#2563EB]" />
               </button>
               <Link
                 to="/catalogo"
                 className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-blue-500 hover:to-blue-700 text-white font-bold text-sm shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
-                <span>Catálogo Completo</span>
+                <span>Ver Catálogo</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -137,9 +179,9 @@ export default function Index() {
                 <TrendingUp className="w-6 h-6 text-[#2563EB]" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#1F3A5F]">Visão Estratégica</h4>
+                <h4 className="text-sm font-bold text-[#1F3A5F]">Modelagem & FP&A</h4>
                 <p className="text-xs text-[#64748B]">
-                  Metodologias aplicadas com foco em tração, governança e valor.
+                  Projeções plurianuais, testes de estresse de liquidez, Budget e Rolling Forecast.
                 </p>
               </div>
             </div>
@@ -149,9 +191,10 @@ export default function Index() {
                 <Award className="w-6 h-6 text-[#E1A63E]" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#1F3A5F]">Assessoria Sênior</h4>
+                <h4 className="text-sm font-bold text-[#1F3A5F]">Controle & Processos</h4>
                 <p className="text-xs text-[#64748B]">
-                  Atendimento direto com consultores especialistas em finanças corporativas.
+                  Fluxo de caixa projetado vs. realizado, alçadas de aprovação e fechamento
+                  estruturado.
                 </p>
               </div>
             </div>
@@ -161,9 +204,9 @@ export default function Index() {
                 <BookOpen className="w-6 h-6 text-[#2563EB]" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#1F3A5F]">Educação Executiva</h4>
+                <h4 className="text-sm font-bold text-[#1F3A5F]">Automação & BI</h4>
                 <p className="text-xs text-[#64748B]">
-                  Planilhas, cursos e livros práticos com aplicação corporativa imediata.
+                  Dashboards executivos, integração de ERPs e painéis dinâmicos de DRE e EBITDA.
                 </p>
               </div>
             </div>
@@ -175,17 +218,17 @@ export default function Index() {
       <section id="produtos" className="py-20 bg-[#F8FAFC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center max-w-2xl mx-auto mb-12">
+          <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB] mb-2 block">
-              Catálogo Oficial
+              Escada de Soluções
             </span>
             <h2 className="text-3xl sm:text-4xl font-black text-[#0F1E36] mb-4">
-              Nossos Produtos & Programas
+              Produtos & Programas Oficiais
             </h2>
             <div className="w-20 h-1 bg-[#2563EB] mx-auto rounded-full mb-4" />
             <p className="text-base text-[#64748B]">
-              Selecione o programa ideal para transformar a governança e acelerar a maturidade
-              financeira do seu negócio.
+              Catálogo compacto com soluções de entrada, Box analítico, curso de controladoria,
+              mentoria individual e consultoria institucional.
             </p>
 
             {/* Category filter pills */}
@@ -238,8 +281,31 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Four Service Fronts Section (Institutional Presentation) */}
+      <section className="py-20 bg-[#070D18] text-white border-y border-slate-800 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(37,99,235,0.18),transparent_60%)] pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-[#E1A63E] uppercase tracking-wider mb-3">
+              <Layers className="w-3.5 h-3.5" />
+              Portfólio Institucional
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight mb-4">
+              Quatro Frentes Estruturais de Atuação
+            </h2>
+            <p className="text-sm sm:text-base text-slate-300">
+              Conheça as frentes modulares da A² Strategic Solutions, desenhadas para elevar a
+              maturidade analítica e operacional da gestão financeira.
+            </p>
+          </div>
+
+          <ServiceFronts variant="dark" showStatement={true} />
+        </div>
+      </section>
+
       {/* Video & Platform Walkthrough Section (LeverPro Benchmark Section) */}
-      <section className="py-20 bg-[#0B1527] text-white border-y border-slate-800 relative overflow-hidden">
+      <section className="py-20 bg-[#0B1527] text-white border-b border-slate-800 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.15),transparent_60%)] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -254,9 +320,9 @@ export default function Index() {
                 Veja a inteligência estratégica acontecendo na prática.
               </h2>
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
-                Assim como nos maiores benchmarks do mercado, a{' '}
-                <strong>A² Strategic Solutions</strong> combina governança de conselho com modelos
-                matemáticos e visões interativas que eliminam o retrabalho de planilhas dispersas.
+                A <strong>A² Strategic Solutions</strong> combina rotinas de controladoria com
+                modelos analíticos e visões interativas que conferem agilidade ao fechamento
+                contábil e gerencial.
               </p>
 
               <div className="space-y-3 pt-2">
@@ -274,11 +340,11 @@ export default function Index() {
                   <CheckCircle2 className="w-5 h-5 text-[#E1A63E] flex-shrink-0 mt-0.5" />
                   <div>
                     <h4 className="text-sm font-bold text-white">
-                      Valuation & Múltiplos Contínuos
+                      Valuation & Cenários Operacionais
                     </h4>
                     <p className="text-xs text-slate-400">
-                      Simulação de cenários (Conservador, Base, Otimista) com taxa de desconto
-                      auditável.
+                      Simulação de cenários (Conservador, Base, Otimista) com testes de estresse de
+                      liquidez.
                     </p>
                   </div>
                 </div>
@@ -286,9 +352,11 @@ export default function Index() {
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-sm font-bold text-white">Governança Segura Padrão IBGC</h4>
+                    <h4 className="text-sm font-bold text-white">
+                      Governança & Políticas Internas
+                    </h4>
                     <p className="text-xs text-slate-400">
-                      Relatórios prontos para comitês, acionistas e auditorias corporativas.
+                      Alçadas de aprovação, auditoria de processos e segregação estrita de funções.
                     </p>
                   </div>
                 </div>

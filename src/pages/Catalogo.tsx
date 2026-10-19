@@ -3,6 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom'
 import type { Product } from '@/types'
 import { getProducts } from '@/services/products'
 import { ProductCard } from '@/components/ProductCard'
+import { ServiceFronts } from '@/components/ServiceFronts'
 import {
   Layers,
   Sparkles,
@@ -62,7 +63,7 @@ export default function Catalogo() {
     }
   }
 
-  const categories = ['Todos', 'Mentoria', 'Curso', 'E-book', 'Serviço']
+  const categories = ['Todos', 'Produto de Entrada', 'Box', 'Curso', 'Mentoria', 'Serviços']
 
   const filteredProducts = products.filter((p) => {
     const matchesCategory =
@@ -91,8 +92,8 @@ export default function Catalogo() {
               Catálogo Oficial de Soluções
             </h1>
             <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-              Programas de mentoria executiva, arquitetura financeira, governança corporativa e
-              soluções analíticas com o selo institucional da{' '}
+              Modelagem financeira, controladoria estratégica, automação analítica, FP&A e mentoria
+              executiva estruturadas no padrão institucional da{' '}
               <strong>A² Strategic Solutions</strong>.
             </p>
           </div>
@@ -231,25 +232,42 @@ export default function Catalogo() {
           </div>
         )}
 
+        {/* Four Service Fronts Institutional Section */}
+        <div className="mt-20 pt-12 border-t border-slate-200">
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB] mb-2 block">
+              Estrutura Institucional
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-[#0F1E36] mb-3">
+              As Quatro Frentes de Atuação
+            </h2>
+            <p className="text-sm text-slate-600">
+              Conheça a arquitetura completa das frentes de consultoria e soluções analíticas da A²
+              Strategic Solutions.
+            </p>
+          </div>
+          <ServiceFronts variant="light" showStatement={true} />
+        </div>
+
         {/* Bottom Institutional Info Banner */}
-        <div className="mt-20 p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-[#0F1E36] to-[#1F3A5F] text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-slate-700">
+        <div className="mt-16 p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-[#0F1E36] to-[#1F3A5F] text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border border-slate-700">
           <div className="space-y-2 text-center md:text-left">
             <span className="text-xs font-bold uppercase tracking-widest text-[#E1A63E]">
-              Assessoria Customizada
+              Apresentação Institucional
             </span>
             <h3 className="text-xl sm:text-2xl font-black">
-              Precisa de um programa sob medida para o seu grupo econômico?
+              Demanda de projetos corporativos ou assessoria continuada?
             </h3>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Nossos conselheiros sêniores estruturam planos de M&A, controladoria, DRE gerencial e
-              governança desenhados especificamente para a escala do seu negócio.
+              Estruturamos atuações modulares nas frentes de Modelagem Financeira, Controle de
+              Processos, BI e FP&A com governança de padrão executivo.
             </p>
           </div>
           <Link
-            to="/minha-conta"
+            to="/produto/servicos-consultoria-apresentacao-institucional"
             className="flex-shrink-0 px-6 py-3.5 bg-white text-[#0F1E36] hover:bg-slate-100 rounded-xl font-bold text-sm shadow-md transition-all flex items-center gap-2 hover:-translate-y-0.5"
           >
-            <span>Falar com especialista</span>
+            <span>Ver detalhes dos Serviços</span>
             <ArrowRight className="w-4 h-4 text-[#2563EB]" />
           </Link>
         </div>

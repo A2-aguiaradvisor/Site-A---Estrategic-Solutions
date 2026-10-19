@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-19T21:10:02.408Z",
+  "generatedAt": "2026-10-19T21:48:29.383Z",
   "collections": [
     {
       "name": "users",
@@ -90,7 +90,15 @@
           "type": "select",
           "required": true,
           "system": false,
-          "selectValues": ["Mentoria", "Curso", "E-book", "Serviço"]
+          "selectValues": [
+            "Produto de Entrada",
+            "Box",
+            "Curso",
+            "Mentoria",
+            "Serviços",
+            "E-book",
+            "Serviço"
+          ]
         },
         {
           "name": "whats_included",

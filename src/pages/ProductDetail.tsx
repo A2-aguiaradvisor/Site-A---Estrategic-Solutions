@@ -6,6 +6,7 @@ import { formatBRL } from '@/lib/formatters'
 import { useCart } from '@/contexts/CartContext'
 import { useToast } from '@/hooks/use-toast'
 import { ProductDashboardMockup } from '@/components/ProductDashboardMockup'
+import { ServiceFronts } from '@/components/ServiceFronts'
 import {
   ShoppingBag,
   Zap,
@@ -232,16 +233,15 @@ export default function ProductDetail() {
             {/* Structured Details Card */}
             <div className="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-card-rest space-y-6">
               <h3 className="text-base font-bold text-[#1F3A5F] pb-3 border-b border-slate-100">
-                Sobre este produto
+                Sobre esta solução
               </h3>
 
               {/* Long description */}
               {product.long_description && (
-                <div className="text-sm text-slate-600 leading-relaxed space-y-2">
+                <div className="text-sm text-slate-600 leading-relaxed space-y-3 whitespace-pre-line">
                   <p>{product.long_description}</p>
                 </div>
               )}
-
               {/* O que está incluído */}
               {whatsIncludedList.length > 0 && (
                 <div className="space-y-3 pt-2">
@@ -287,6 +287,25 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
+
+        {/* If this is the "Serviços" product or relates to institutional consulting, show full ServiceFronts breakdown */}
+        {product.category === 'Serviços' && (
+          <div className="mt-16 pt-12 border-t border-slate-200">
+            <div className="text-center max-w-3xl mx-auto mb-10">
+              <span className="text-xs font-bold uppercase tracking-widest text-[#2563EB] mb-2 block">
+                Detalhamento dos Serviços
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-[#0F1E36] mb-3">
+                As Quatro Frentes Estruturais & ESG
+              </h2>
+              <p className="text-sm text-slate-600">
+                Cada frente pode ser contratada de forma modular ou integrada conforme o diagnóstico
+                da sua empresa.
+              </p>
+            </div>
+            <ServiceFronts variant="light" showStatement={true} />
+          </div>
+        )}
       </div>
 
       {/* Sticky Mobile Add to Cart Bar */}
