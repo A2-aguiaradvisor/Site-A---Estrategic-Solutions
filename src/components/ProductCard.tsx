@@ -44,17 +44,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0 }) 
       className="group flex flex-col bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden shadow-card-rest hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1.5"
       style={{ animationDelay: `${index * 80}ms` }}
     >
-      {/* Product Image Container */}
+      {/* Product Image / Technological Dashboard Container */}
       <Link
         to={`/produto/${product.id}`}
-        className="relative aspect-[16/10] overflow-hidden bg-slate-100 block"
+        className="relative aspect-[16/10] overflow-hidden bg-[#0F1E36] block"
       >
         <img
           src={imageUrl}
           alt={product.title}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90"
         />
+
+        {/* Technological HUD overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0A1526] via-transparent to-black/30 pointer-events-none" />
+
+        {/* Live metric badge overlay */}
+        <div className="absolute bottom-2.5 right-3 bg-black/75 backdrop-blur-md border border-white/15 px-2 py-0.5 rounded-md text-[10px] font-mono text-emerald-400 flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>LIVE KPI</span>
+        </div>
+
         <div className="absolute top-3 left-3">
           <span
             className={`inline-block px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full shadow-sm ${catStyle.bg} ${catStyle.text} backdrop-blur-md`}

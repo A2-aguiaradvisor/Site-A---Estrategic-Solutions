@@ -5,6 +5,7 @@ import { getProductByIdOrSlug, getProductImageUrl } from '@/services/products'
 import { formatBRL } from '@/lib/formatters'
 import { useCart } from '@/contexts/CartContext'
 import { useToast } from '@/hooks/use-toast'
+import { ProductDashboardMockup } from '@/components/ProductDashboardMockup'
 import {
   ShoppingBag,
   Zap,
@@ -16,6 +17,8 @@ import {
   FileCheck2,
   Loader2,
   Calendar,
+  BarChart3,
+  Sparkles,
 } from 'lucide-react'
 
 export default function ProductDetail() {
@@ -118,14 +121,21 @@ export default function ProductDetail() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
         {/* Main 2-Column Section */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          {/* Left: Product Image */}
-          <div className="lg:col-span-6">
-            <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden shadow-card-rest sticky top-28">
-              <div className="relative aspect-[16/11] bg-slate-100 overflow-hidden">
-                <img src={imageUrl} alt={product.title} className="w-full h-full object-cover" />
-                <div className="absolute top-4 left-4">
-                  <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-[#1F3A5F] text-white shadow-md">
+          {/* Left: Product Image + Technological Interactive Dashboard Mockup */}
+          <div className="lg:col-span-6 space-y-6">
+            <div className="bg-white rounded-2xl border border-[#E2E8F0] overflow-hidden shadow-card-rest">
+              <div className="relative aspect-[16/11] bg-[#0F1E36] overflow-hidden">
+                <img
+                  src={imageUrl}
+                  alt={product.title}
+                  className="w-full h-full object-cover opacity-90"
+                />
+                <div className="absolute top-4 left-4 flex items-center gap-2">
+                  <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-[#0F1E36]/90 border border-white/20 text-white shadow-md backdrop-blur-md">
                     {product.category}
+                  </span>
+                  <span className="inline-block px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider rounded-full bg-[#E1A63E] text-slate-950 shadow-md">
+                    A² Strategic
                   </span>
                 </div>
               </div>
@@ -138,9 +148,31 @@ export default function ProductDetail() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-[#2563EB] flex-shrink-0" />
-                  <span>Suporte institucional Aguiar Advisory</span>
+                  <span>Suporte institucional A² Strategic Solutions</span>
                 </div>
               </div>
+            </div>
+
+            {/* Embedded Live Dashboard Preview (Interactive) */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#0F1E36] flex items-center gap-1.5">
+                  <BarChart3 className="w-4 h-4 text-[#2563EB]" />
+                  Painel Analítico Aplicado a este Programa
+                </span>
+                <span className="text-[11px] text-[#B47517] font-semibold flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5" /> Interativo
+                </span>
+              </div>
+              <ProductDashboardMockup
+                variant={
+                  product.category === 'Mentoria'
+                    ? 'mentoria'
+                    : product.category === 'Curso'
+                      ? 'curso'
+                      : 'valuation'
+                }
+              />
             </div>
           </div>
 

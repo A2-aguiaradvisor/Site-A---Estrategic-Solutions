@@ -35,13 +35,13 @@ export function getProductImageUrl(product: Product): string {
   if (product.cover_image) {
     return pb.files.getURL(product, product.cover_image)
   }
-  // Curated clean category placeholders using project CDN rule
+  // Technological Dashboards & Analytics images matching LeverPro standards
   const queryMap: Record<string, string> = {
-    Mentoria: 'executive advisory meeting',
-    Curso: 'business finance analytics',
-    'E-book': 'financial planning document',
-    Serviço: 'corporate consultancy board',
+    Mentoria: 'dashboard analytics screen',
+    Curso: 'financial data chart',
+    'E-book': 'business metrics report',
+    Serviço: 'executive trading monitor',
   }
-  const q = encodeURIComponent(queryMap[product.category] || 'business advisory')
-  return `https://img.usecurling.com/p/800/600?q=${q}&dpr=2`
+  const q = encodeURIComponent(queryMap[product.category] || 'dashboard analytics screen')
+  return `https://img.usecurling.com/p/800/600?q=${q}&color=blue&dpr=2`
 }

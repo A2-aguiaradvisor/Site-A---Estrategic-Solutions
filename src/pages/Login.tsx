@@ -89,7 +89,7 @@ export default function Login() {
         </div>
         <h2 className="text-2xl font-bold text-[#1F3A5F]">Acessar sua conta</h2>
         <p className="mt-1 text-sm text-[#64748B]">
-          Entre para gerenciar seus programas e pedidos na Aguiar Advisory
+          Entre para gerenciar seus programas e pedidos na A² Strategic Solutions
         </p>
       </div>
 

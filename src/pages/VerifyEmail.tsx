@@ -101,7 +101,7 @@ export default function VerifyEmail() {
               <h3 className="text-lg font-bold text-[#1F3A5F]">E-mail confirmado com sucesso!</h3>
               <p className="text-sm text-slate-600">
                 Sua conta está ativa e pronta para uso. Você já pode acessar a plataforma executiva
-                da Aguiar Advisory.
+                da A² Strategic Solutions.
               </p>
               <div className="pt-4">
                 <Link

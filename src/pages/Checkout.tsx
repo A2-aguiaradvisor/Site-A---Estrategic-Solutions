@@ -146,8 +146,8 @@ export default function Checkout() {
           <p className="font-bold text-amber-950">Ambiente de Simulação de Pagamento (v1.0)</p>
           <p className="text-xs text-amber-800 mt-0.5 leading-relaxed">
             Nenhuma cobrança bancária real será feita em sua conta ou cartão. Todos os fluxos abaixo
-            são validados em ambiente de testes para fins de aprovação do ecossistema Aguiar
-            Advisory.
+            são validados em ambiente de testes para fins de aprovação do ecossistema A² Strategic
+            Solutions.
           </p>
         </div>
       </div>
@@ -394,7 +394,7 @@ export default function Checkout() {
                   />
                   <span className="text-xs text-slate-600 leading-relaxed">
                     Li e concordo com os termos de contratação dos programas e consultorias da{' '}
-                    <strong>Aguiar Advisory</strong> e confirmo a simulação de pagamento v1.
+                    <strong>A² Strategic Solutions</strong> e confirmo a simulação de pagamento v1.
                   </span>
                 </label>
                 {errors.acceptedTerms && (

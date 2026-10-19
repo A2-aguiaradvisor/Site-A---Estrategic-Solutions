@@ -9,6 +9,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 
 // Public & Catalog Pages
 import Index from '@/pages/Index'
+import Catalogo from '@/pages/Catalogo'
 import ProductDetail from '@/pages/ProductDetail'
 import Cart from '@/pages/Cart'
 
@@ -39,6 +40,8 @@ const App = () => (
             {/* Pages wrapped in the Global Navigation & Footer Layout */}
             <Route element={<Layout />}>
               <Route path="/" element={<Index />} />
+              <Route path="/catalogo" element={<Catalogo />} />
+              <Route path="/produtos" element={<Catalogo />} />
               <Route path="/produto/:id" element={<ProductDetail />} />
               <Route path="/carrinho" element={<Cart />} />
 

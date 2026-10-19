@@ -52,8 +52,9 @@ export default function Layout() {
   }
 
   const navLinks = [
-    { label: 'Catálogo', path: '/' },
-    { label: 'Produtos', path: '/#produtos' },
+    { label: 'Início', path: '/' },
+    { label: 'Catálogo', path: '/catalogo' },
+    { label: 'Produtos', path: '/produtos' },
     { label: 'Minha Conta', path: '/minha-conta', requiresAuth: true },
     { label: 'Meus Pedidos', path: '/meus-pedidos', requiresAuth: true },
   ]
@@ -211,10 +212,17 @@ export default function Layout() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
               >
+                Início
+              </NavLink>
+              <NavLink
+                to="/catalogo"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
+              >
                 Catálogo
               </NavLink>
               <NavLink
-                to="/#produtos"
+                to="/produtos"
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
               >
@@ -323,8 +331,26 @@ export default function Layout() {
                     to="/"
                     className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"
                   >
-                    <ArrowRight className="w-3.5 h-3.5 text-[#2563EB]" />
+                    <ArrowRight className="w-3.5 h-3.5 text-[#E1A63E]" />
+                    Início
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/catalogo"
+                    className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"
+                  >
+                    <ArrowRight className="w-3.5 h-3.5 text-[#E1A63E]" />
                     Catálogo de Soluções
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/produtos"
+                    className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"
+                  >
+                    <ArrowRight className="w-3.5 h-3.5 text-[#E1A63E]" />
+                    Produtos & Programas
                   </Link>
                 </li>
                 <li>
@@ -366,11 +392,11 @@ export default function Layout() {
                 Dúvidas sobre programas de mentoria institucional ou assessoria sob medida:
               </p>
               <a
-                href="mailto:contato@aguiaradvisory.com.br"
-                className="inline-flex items-center gap-2 text-sm text-[#2563EB] hover:text-blue-400 font-semibold transition-colors"
+                href="mailto:contato@a2strategic.com.br"
+                className="inline-flex items-center gap-2 text-sm text-[#E1A63E] hover:text-yellow-300 font-semibold transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                contato@aguiaradvisory.com.br
+                contato@a2strategic.com.br
               </a>
               <div className="mt-4 p-3 bg-slate-900/80 rounded-lg border border-slate-800 text-xs text-slate-400">
                 <span className="font-semibold text-slate-300">Horário executivo:</span> Seg. a Sex.
@@ -381,8 +407,12 @@ export default function Layout() {
 
           {/* Bottom Bar */}
           <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-            <p>© {new Date().getFullYear()} Aguiar Advisory. Todos os direitos reservados.</p>
-            <p className="text-slate-400">Identidade provisória • Plataforma institucional v1.0</p>
+            <p>
+              © {new Date().getFullYear()} A² Strategic Solutions. Todos os direitos reservados.
+            </p>
+            <p className="text-slate-400">
+              Plataforma Executiva v1.0 • Ecossistema Digital de Alta Performance
+            </p>
           </div>
         </div>
       </footer>
