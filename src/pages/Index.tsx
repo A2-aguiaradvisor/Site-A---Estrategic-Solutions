@@ -98,17 +98,16 @@ export default function Index() {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md mb-6 shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-[#E1A63E]" />
               <span className="text-xs font-bold tracking-widest text-slate-100 uppercase">
-                A² Strategic Solutions • Strategic Controller Advisory
+                A² Strategic Solutions
               </span>
             </div>
 
-            {/* Factual Headline derived from real offerings */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.08] mb-6">
-              Soluções integradas em{' '}
-              <span className="bg-gradient-to-r from-blue-200 via-[#E1A63E] to-amber-200 bg-clip-text text-transparent">
-                Controladoria Estratégica,
-              </span>{' '}
-              Modelagem e Gestão Financeira.
+            {/* Impactful Headline in Brand Navy & Gold */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.1] mb-6">
+              Controladoria Estratégica &{' '}
+              <span className="bg-gradient-to-r from-[#E1A63E] via-amber-200 to-[#E1A63E] bg-clip-text text-transparent drop-shadow-sm">
+                Modelagem Financeira
+              </span>
             </h1>
 
             {/* Factual Subheadline referencing real product ladder */}

@@ -21,16 +21,23 @@ export const BrandWordmark: React.FC<BrandWordmarkProps> = ({ className = '', li
           <img
             src={officialLogo}
             alt="A² Strategic Solutions Emblem"
-            className="w-full h-full object-cover scale-[1.38] object-[center_32%]"
+            className="w-full h-full object-cover scale-[1.85] object-[center_24%]"
           />
         </div>
       </div>
 
-      {/* Brand name text: "A²" removed here because the zoomed eagle emblem already contains A² in metallic silver */}
+      {/* Brand name text: "Strategic Solutions" beside the eagle emblem, in brand navy palette */}
       <div className="flex flex-col leading-tight">
         <span
-          className={`text-[10px] sm:text-[11px] font-bold tracking-[0.28em] uppercase ${
-            light ? 'text-[#E1A63E]' : 'text-[#B47517]'
+          className={`text-xs sm:text-sm font-black tracking-wider uppercase ${
+            light ? 'text-white' : 'text-[#0F1E36]'
+          }`}
+        >
+          Strategic
+        </span>
+        <span
+          className={`text-[10px] sm:text-[11px] font-bold tracking-[0.24em] uppercase ${
+            light ? 'text-[#E1A63E]' : 'text-[#1F3A5F]'
           }`}
         >
           SOLUTIONS

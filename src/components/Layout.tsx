@@ -54,7 +54,7 @@ export default function Layout() {
   const navLinks = [
     { label: 'Início', path: '/' },
     { label: 'Catálogo', path: '/catalogo' },
-    { label: 'Produtos', path: '/produtos' },
+    { label: 'Produtos (Dashboard)', path: '/produtos' },
     { label: 'Minha Conta', path: '/minha-conta', requiresAuth: true },
     { label: 'Meus Pedidos', path: '/meus-pedidos', requiresAuth: true },
   ]
@@ -226,7 +226,7 @@ export default function Layout() {
                 onClick={() => setMobileMenuOpen(false)}
                 className="px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
               >
-                Produtos
+                Produtos (Dashboard)
               </NavLink>
               <NavLink
                 to="/carrinho"
@@ -350,7 +350,7 @@ export default function Layout() {
                     className="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"
                   >
                     <ArrowRight className="w-3.5 h-3.5 text-[#E1A63E]" />
-                    Produtos & Programas
+                    Produtos (Dashboard de Receita)
                   </Link>
                 </li>
                 <li>

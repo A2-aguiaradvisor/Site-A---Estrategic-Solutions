@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <title>ABC · Dashboard de Receita 2024 × 2025</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+      :root {
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        --bg: #eef1f6;
+        --card: #fff;
+        --tx: #0e1a2f;
+        --mu: #5d6b85;
+        --bd: #e0e6ef;
+        --nv: #14213d;
+        --y24: #a7b3c7;
+        --y25: #1f3a68;
+        --neg: #dc2626;
+        --pos: #059669;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #0a111f;
+          --card: #121b2d;
+          --tx: #e8edf7;
+          --mu: #93a0ba;
+          --bd: #233049;
+          --nv: #0a1220;
+          --y24: #5b6b88;
+          --y25: #8fb0ee;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--tx);
+        font:
+          14px/1.5 Inter,
+          system-ui,
+          Segoe UI,
+          Arial,
+          sans-serif;
+      }
+      header {
+        background: var(--nv);
+        color: #fff;
+        padding: 18px 28px 0;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 22px;
+      }
+      header p {
+        margin: 2px 0 12px;
+        opacity: 0.7;
+        font-size: 13px;
+      }
+      nav {
+        display: flex;
+        gap: 4px;
+        flex-wrap: wrap;
+      }
+      nav button {
+        background: none;
+        border: 0;
+        color: #b8c4dc;
+        padding: 10px 16px;
+        cursor: pointer;
+        font: inherit;
+        font-weight: 600;
+        border-bottom: 3px solid transparent;
+      }
+      nav button.on {
+        color: #fff;
+        border-color: #8fb0ee;
+      }
+      main {
+        max-width: 1500px;
+        margin: auto;
+        padding: 18px 28px;
+      }
+      section {
+        display: none;
+      }
+      section.on {
+        display: block;
+      }
+      .kp {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .k {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: 14px;
+        border-top: 3px solid var(--y25);
+      }
+      .k small {
+        color: var(--mu);
+        display: block;
+      }
+      .k b {
+        font-size: 23px;
+        display: block;
+      }
+      .k i {
+        font-style: normal;
+        font-size: 12px;
+      }
+      .g {
+        display: grid;
+        gap: 14px;
+        margin-bottom: 14px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      @media (max-width: 900px) {
+        .g {
+          grid-template-columns: 1fr;
+        }
+      }
+      .c {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 12px;
+        padding: 16px;
+        min-width: 0;
+        margin-bottom: 0;
+      }
+      .g + .c {
+        margin-bottom: 14px;
+      }
+      h2 {
+        font-size: 15px;
+        margin: 0;
+      }
+      .s {
+        color: var(--mu);
+        font-size: 12px;
+        margin: 2px 0 10px;
+      }
+      .cv {
+        position: relative;
+        height: 290px;
+      }
+      .cv.t {
+        height: 340px;
+      }
+      .tg {
+        display: inline-flex;
+        background: var(--bg);
+        border-radius: 8px;
+        padding: 3px;
+        margin-bottom: 8px;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+      .tg button {
+        border: 0;
+        background: none;
+        color: var(--mu);
+        padding: 5px 11px;
+        border-radius: 6px;
+        cursor: pointer;
+        font: inherit;
+        font-size: 12px;
+      }
+      .tg button.on {
+        background: var(--y25);
+        color: var(--card);
+      }
+      .pos {
+        color: var(--pos);
+      }
+      .neg {
+        color: var(--neg);
+      }
+      .tw {
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 12.5px;
+      }
+      th,
+      td {
+        padding: 6px 8px;
+        border-bottom: 1px solid var(--bd);
+        text-align: right;
+        white-space: nowrap;
+      }
+      th:first-child,
+      td:first-child {
+        text-align: left;
+      }
+      th {
+        color: var(--mu);
+      }
+      tr.t td {
+        font-weight: 700;
+        border-top: 2px solid var(--bd);
+      }
+      .in {
+        border-left: 4px solid var(--y25);
+        padding: 4px 12px;
+        margin: 8px 0;
+        font-size: 13px;
+      }
+      .in b {
+        display: block;
+      }
+      .ft {
+        color: var(--mu);
+        font-size: 11.5px;
+        margin-top: 10px;
+      }
+      .d2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>ABC · Dashboard de Receita</h1>
+      <p>
+        Empresa-modelo · Comparativo 2024 × 2025 · R$ milhões · dados fictícios amarrados ao ROL
+        consolidado do Projeto Corujão
+      </p>
+      <nav id="nav"></nav>
+    </header>
+    <main>
+      <section id="s0">
+        <div class="kp" id="k0"></div>
+        <div class="g">
+          <div class="c">
+            <h2>ROL por canal de venda</h2>
+            <p class="s">Conta contábil de receita, R$ mi</p>
+            <div class="cv"><canvas id="cn"></canvas></div>
+          </div>
+          <div class="c">
+            <h2>Do ROL ao lucro</h2>
+            <p class="s">DRE do Corujão (consolidado), R$ mi</p>
+            <div class="cv"><canvas id="dre"></canvas></div>
+          </div>
+        </div>
+        <div class="g">
+          <div class="c">
+            <h2>Variação do ROL por linha de produto</h2>
+            <p class="s">Contribuição ao crescimento (+R$ <span id="vt"></span> mi)</p>
+            <div class="cv"><canvas id="wf"></canvas></div>
+          </div>
+          <div class="c">
+            <h2>Principais leituras</h2>
+            <div id="ex"></div>
+          </div>
+        </div>
+      </section>
+      <section id="s1">
+        <div class="g">
+          <div class="c">
+            <h2>Mix por linha de produto</h2>
+            <p class="s">Participação no ROL 2024 e 2025</p>
+            <div class="d2">
+              <div class="cv"><canvas id="m24"></canvas></div>
+              <div class="cv"><canvas id="m25"></canvas></div>
+            </div>
+          </div>
+          <div class="c">
+            <h2>Reclassificação de contas</h2>
+            <p class="s">
+              E-commerce próprio → Marketplaces: compare a visão contábil e a por canal ajustado
+            </p>
+            <div class="tg" id="vw"></div>
+            <div class="cv" style="height: 250px"><canvas id="ac"></canvas></div>
+          </div>
+        </div>
+        <div class="g">
+          <div class="c">
+            <h2>Evolução mensal 2025</h2>
+            <p class="s">Colunas empilhadas · alterne a leitura</p>
+            <div class="tg" id="mv"></div>
+            <div class="cv t"><canvas id="mo"></canvas></div>
+          </div>
+          <div class="c">
+            <h2>Sazonalidade do ROL</h2>
+            <p class="s">ROL mensal e variação sobre o mês anterior</p>
+            <div class="cv t"><canvas id="vo"></canvas></div>
+          </div>
+        </div>
+      </section>
+      <section id="s2">
+        <div class="g">
+          <div class="c">
+            <h2>Top 10 clientes · participação</h2>
+            <p class="s">Filtre por linha de produto</p>
+            <div class="tg" id="cf"></div>
+            <div class="cv t"><canvas id="cp"></canvas></div>
+          </div>
+          <div class="c">
+            <h2>Top 10 clientes · R$ milhões</h2>
+            <p class="s" id="cc"></p>
+            <div class="cv t" style="margin-top: 34px"><canvas id="cb"></canvas></div>
+          </div>
+        </div>
+        <div class="c">
+          <h2>Ranking por linha de produto · 2025</h2>
+          <div class="tw"><table id="ct"></table></div>
+        </div>
+      </section>
+      <section id="s3">
+        <div class="c" style="margin-bottom: 14px">
+          <h2>Amarração · Composição × DRE (ROL consolidado)</h2>
+          <p class="s">R$ mil · ROL conforme Projeto Corujão</p>
+          <div class="tw"><table id="tie"></table></div>
+        </div>
+        <div class="c">
+          <h2>Composição por conta contábil</h2>
+          <div class="tw"><table id="tb"></table></div>
+        </div>
+      </section>
+      <section id="s4">
+        <div class="c">
+          <h2>A história em 4 atos</h2>
+          <p class="s">Anexo narrativo</p>
+          <div id="st"></div>
+        </div>
+        <p class="ft" id="ft"></p>
+      </section>
+    </main>
+    <script>
+      const D = {
+        P: [
+          'Skincare',
+          'Maquiagem',
+          'Perfumaria',
+          'Cabelos',
+          'Corpo e Kits',
+          'Royalties e Serviços',
+        ],
+        accts: [
+          { c: '4.1.1.01.01.001', n: 'Venda Atacado – Distribuidores', a: 36.2, b: 40.8 },
+          { c: '4.1.1.01.01.002', n: 'Venda Varejo – Lojas Próprias', a: 14.5, b: 15.6 },
+          { c: '4.1.1.01.01.003', n: 'Venda Franquias', a: 9.8, b: 12.7 },
+          { c: '4.1.1.01.02.001', n: 'Venda E-commerce Próprio', a: 29.401151, b: 14.9 },
+          { c: '4.1.1.01.02.002', n: 'Venda Marketplaces', a: 0, b: 23.445235 },
+          { c: '4.1.1.02.01.001', n: 'Royalties e Serviços', a: 4.2, b: 5.1 },
+        ],
+        gt: [
+          [27.86935681, 22.025781995, 17.530724445, 12.586161140000002, 9.889126609999991, 4.2],
+          [35.24203708, 24.604958815, 20.414594649999998, 16.76145666, 10.422187794999985, 5.1],
+        ],
+        mp: {
+          Skincare: [
+            2.5072216799039873, 2.3385388698321194, 2.6233805184787187, 2.8557525555419483,
+            3.4578407595350242, 2.9597580498371814, 2.745670863476968, 2.8925804898735246,
+            3.0235901890448496, 3.098091234276968, 3.9908450238412803, 2.74876684635743,
+          ],
+          Maquiagem: [
+            1.5792630587854453, 1.4738967460148793, 1.6533939306402419, 2.05352662906358,
+            2.4775087773358817, 2.1273245091883606, 1.97961557913079, 2.086912741786902,
+            2.181977747412732, 2.2256651672807903, 2.8137795384712434, 1.9520943898891558,
+          ],
+          Perfumaria: [
+            1.48259844572609, 1.385281111501191, 1.550283966497149, 1.6830607033080316,
+            2.067186902861195, 1.7428851897836917, 1.60180765479318, 1.6958484851881566,
+            1.7636032708409803, 1.80595360129318, 2.1088541295984586, 1.527231188608695,
+          ],
+          Cabelos: [
+            1.0864843772491022, 1.0132531651729972, 1.137358659836912, 1.3846060759351997,
+            1.6651647273348762, 1.4363027525512413, 1.3381129881232716, 1.4085512092911832,
+            1.4739887872830508, 1.5057275547232716, 1.9649174733693355, 1.3469888891295607,
+          ],
+          'Corpo e Kits': [
+            0.7424324383353743, 0.6925301074788117, 0.7755829245469776, 0.8445775361512398,
+            1.025500857933022, 0.8774791736395239, 0.810816414475789, 0.854856748860233,
+            0.8913158554183859, 0.9150382924257889, 1.171389084719681, 0.8206683610151578,
+          ],
+          'Royalties e Serviços': [
+            0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425,
+          ],
+        },
+        mch: {
+          'Venda Atacado – Distribuidores': [
+            3.264, 3.0599999999999996, 3.468, 3.468, 4.284, 3.468, 3.264, 3.468, 3.6719999999999997,
+            3.6719999999999997, 3.468, 2.2439999999999998,
+          ],
+          'Venda Varejo – Lojas Próprias': [
+            1.17, 1.092, 1.17, 1.248, 1.56, 1.326, 1.17, 1.248, 1.248, 1.326, 1.56, 1.482,
+          ],
+          'Venda Franquias': [
+            0.9524999999999999, 0.889, 1.016, 1.016, 1.3335, 1.1429999999999998, 0.9524999999999999,
+            1.016, 1.016, 1.0795000000000001, 1.27, 1.016,
+          ],
+          'Venda E-commerce Próprio': [
+            2.0115000000000003, 1.8625, 2.0860000000000003, 0.7450000000000001, 0.8195,
+            0.7450000000000001, 0.7450000000000001, 0.7450000000000001, 0.8195, 0.894, 2.235, 1.192,
+          ],
+          'Venda Marketplaces': [
+            0.0, 0.0, 0.0, 2.3445235, 2.6962020250000003, 2.461749675, 2.3445235, 2.461749675,
+            2.57897585, 2.57897585, 3.51678525, 2.461749675,
+          ],
+          'Royalties e Serviços': [
+            0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425, 0.425,
+          ],
+        },
+        clients: [
+          {
+            n: 'Marketplace Ágora',
+            ch: 'Venda Marketplaces',
+            t: 12.1,
+            by: {
+              Skincare: 3.80135243184443,
+              Maquiagem: 3.446090124088738,
+              Perfumaria: 1.319945487852941,
+              Cabelos: 2.4715991424901698,
+              'Corpo e Kits': 1.061012813723721,
+            },
+          },
+          {
+            n: 'Distribuidora Nativa Beauty',
+            ch: 'Venda Atacado – Distribuidores',
+            t: 8.9,
+            by: {
+              Skincare: 2.8306016271721535,
+              Maquiagem: 2.004736407863807,
+              Perfumaria: 2.0476483439574156,
+              Cabelos: 1.2269514915871553,
+              'Corpo e Kits': 0.7900621294194669,
+            },
+          },
+          {
+            n: 'Mercado Lumi',
+            ch: 'Venda Marketplaces',
+            t: 7.3,
+            by: {
+              Skincare: 2.293377913426805,
+              Maquiagem: 2.0790461079213047,
+              Perfumaria: 0.7963307488699563,
+              Cabelos: 1.4911300611717553,
+              'Corpo e Kits': 0.6401151686101787,
+            },
+          },
+          {
+            n: 'Beleza Brasil Atacado',
+            ch: 'Venda Atacado – Distribuidores',
+            t: 6.8,
+            by: {
+              Skincare: 2.1627068612101845,
+              Maquiagem: 1.5317087161206615,
+              Perfumaria: 1.5644953639225196,
+              Cabelos: 0.937446083459849,
+              'Corpo e Kits': 0.6036429752867836,
+            },
+          },
+          {
+            n: 'Perfumarias Estrela do Sul',
+            ch: 'Venda Atacado – Distribuidores',
+            t: 5.4,
+            by: {
+              Skincare: 1.7174436839022056,
+              Maquiagem: 1.2163569216252315,
+              Perfumaria: 1.2423933772325892,
+              Cabelos: 0.7444424780416449,
+              'Corpo e Kits': 0.4793635391983282,
+            },
+          },
+          {
+            n: 'Rede Bella Vita',
+            ch: 'Venda Franquias',
+            t: 4.9,
+            by: {
+              Skincare: 1.6958686819120203,
+              Maquiagem: 0.9608613679718664,
+              Perfumaria: 0.9814288707395556,
+              Cabelos: 0.7239528498336512,
+              'Corpo e Kits': 0.5378882295429067,
+            },
+          },
+          {
+            n: 'Grupo Vitória Varejo',
+            ch: 'Venda Atacado – Distribuidores',
+            t: 4.3,
+            by: {
+              Skincare: 1.367594044588793,
+              Maquiagem: 0.968580511664536,
+              Perfumaria: 0.989313244833358,
+              Cabelos: 0.5927967880701986,
+              'Corpo e Kits': 0.38171541084311317,
+            },
+          },
+          {
+            n: 'Drogarias Aurora',
+            ch: 'Venda Atacado – Distribuidores',
+            t: 3.9,
+            by: {
+              Skincare: 1.2403759939293706,
+              Maquiagem: 0.8784799989515559,
+              Perfumaria: 0.8972841057790921,
+              Cabelos: 0.5376529008078546,
+              'Corpo e Kits': 0.3462070005321259,
+            },
+          },
+          {
+            n: 'Magnólia Franquias',
+            ch: 'Venda Franquias',
+            t: 3.4,
+            by: {
+              Skincare: 1.17672520785732,
+              Maquiagem: 0.6667201328784378,
+              Perfumaria: 0.6809914613294875,
+              Cabelos: 0.502334630496819,
+              'Corpo e Kits': 0.3732285674379352,
+            },
+          },
+          {
+            n: 'Farma Viva',
+            ch: 'Venda Atacado – Distribuidores',
+            t: 3.0,
+            by: {
+              Skincare: 0.9541353799456697,
+              Maquiagem: 0.6757538453473507,
+              Perfumaria: 0.690218542906994,
+              Cabelos: 0.4135791544675804,
+              'Corpo e Kits': 0.2663130773324045,
+            },
+          },
+          {
+            n: 'Casa Orquídea',
+            ch: 'Venda Franquias',
+            t: 2.2,
+            by: {
+              Skincare: 0.7614104286135601,
+              Maquiagem: 0.43140714480369513,
+              Perfumaria: 0.44064153380143317,
+              Cabelos: 0.32504005502735356,
+              'Corpo e Kits': 0.24150083775395811,
+            },
+          },
+        ],
+        rol: [94.10115144, 112.54523547],
+        cell: [
+          [
+            [
+              10.376316461542556, 9.335202651454907, 8.335589877679048, 4.670733575783789,
+              3.4821574335396988,
+            ],
+            [
+              3.8848392168021455, 3.295334357186235, 4.012459378019192, 1.561337940802335,
+              1.7460291071900924,
+            ],
+            [
+              3.074937118917746, 2.2131291968179454, 1.9761474945716921, 1.3631622381383064,
+              1.17262395155431,
+            ],
+            [
+              10.533264012737552, 7.182115789540913, 3.2065276947300703, 4.9909273852755724,
+              3.488316117715889,
+            ],
+            [0.0, 0.0, 0.0, 0.0, 0.0],
+          ],
+          [
+            [
+              12.976241167261106, 9.190252296723969, 9.386972183535118, 5.624676500759094,
+              3.6218578517207014,
+            ],
+            [
+              4.644682498738498, 3.101561899376276, 4.319934119763268, 1.797573471241296,
+              1.7362480108806608,
+            ],
+            [
+              4.39541474699646, 2.4903957904576943, 2.543703399671909, 1.876367590385177,
+              1.3941184724887579,
+            ],
+            [
+              5.860111800688716, 3.1455262837776297, 1.6064285710047583, 2.673812426417697,
+              1.6141209181111986,
+            ],
+            [
+              7.365586866315219, 6.677222544664431, 2.5575563760249462, 4.789026671196737,
+              2.055842541798666,
+            ],
+          ],
+        ],
+      }
+      const F = (v, n = 1) =>
+          v.toLocaleString('pt-BR', { minimumFractionDigits: n, maximumFractionDigits: n }),
+        P = (v) => (v >= 0 ? '+' : '') + F(v * 100) + '%',
+        Q = (id) => document.getElementById(id)
+      const cs = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim()
+      Chart.defaults.color = cs('--mu')
+      Chart.defaults.font.family = 'Inter,system-ui,sans-serif'
+      Chart.defaults.plugins.legend.position = 'bottom'
+      Chart.defaults.plugins.legend.labels.boxWidth = 12
+      Chart.defaults.maintainAspectRatio = false
+      Chart.defaults.borderColor = cs('--bd')
+      const C24 = cs('--y24'),
+        C25 = cs('--y25'),
+        GC = ['#1f3a68', '#0d9488', '#d97706', '#7c3aed', '#be185d', '#64748b'],
+        RAMP = [
+          '#14213d',
+          '#1f3a68',
+          '#2f5aa8',
+          '#5b8dff',
+          '#0d9488',
+          '#2bb3a5',
+          '#7fcfc6',
+          '#94a3b8',
+          '#b8c2d4',
+          '#d8dee9',
+          '#e8ecf3',
+        ]
+      const ch = {}
+      function mk(id, cfg) {
+        if (ch[id]) ch[id].destroy()
+        ch[id] = new Chart(id, cfg)
+      }
+      const mes = [
+          'Jan',
+          'Fev',
+          'Mar',
+          'Abr',
+          'Mai',
+          'Jun',
+          'Jul',
+          'Ago',
+          'Set',
+          'Out',
+          'Nov',
+          'Dez',
+        ],
+        PL = D.P,
+        A = D.accts,
+        R = D.rol
+      const kp = (l, v, s, c) =>
+        `<div class="k"><small>${l}</small><b>${v}</b><i class="${c || ''}">${s || ''}</i></div>`
+      function tabs() {
+        const n = [
+          'Visão Executiva',
+          'Receita',
+          'Clientes',
+          'Amarração com a DRE',
+          'Anexo: História',
+        ]
+        Q('nav').innerHTML = n.map((x, i) => `<button data-i="${i}">${x}</button>`).join('')
+        Q('nav').onclick = (e) => {
+          if (e.target.dataset.i != null) sel(+e.target.dataset.i)
+        }
+      }
+      function sel(i) {
+        document.querySelectorAll('section').forEach((s, j) => s.classList.toggle('on', i == j))
+        ;[...Q('nav').children].forEach((b, j) => b.classList.toggle('on', i == j))
+        Object.values(ch).forEach((c) => c.resize())
+      }
+      function tgl(id, o, fn, def) {
+        const el = Q(id)
+        el.innerHTML = o.map((x) => `<button data-o="${x}">${x}</button>`).join('')
+        const on = (x) => {
+          ;[...el.children].forEach((b) => b.classList.toggle('on', b.dataset.o == x))
+          fn(x)
+        }
+        el.onclick = (e) => e.target.dataset.o && on(e.target.dataset.o)
+        on(def)
+      }
+      const bar = (l, ds, o = {}) => ({
+        type: 'bar',
+        data: { labels: l, datasets: ds },
+        options: Object.assign(
+          {
+            scales: { y: { grace: '8%' } },
+            plugins: {
+              tooltip: {
+                callbacks: {
+                  label: (c) => (c.dataset.label ? c.dataset.label + ': ' : '') + F(c.raw),
+                },
+              },
+            },
+          },
+          o,
+        ),
+      })
+      const yy = (a) => [
+        { label: '2024', data: a.map((x) => x[0]), backgroundColor: C24, borderRadius: 4 },
+        { label: '2025', data: a.map((x) => x[1]), backgroundColor: C25, borderRadius: 4 },
+      ]
+      // DRE do Corujão (R$ mi, consolidado): [2024, 2025]
+      const V = { rol: R, cmv: [24.596, 26.251], lb: [69.505, 86.294], ll: [11.978, 16.069] }
+      const gt = [0, 1].map((y) => D.gt[y]),
+        G = (i) => [D.gt[0][i], D.gt[1][i]],
+        dig = [A[3].a + A[4].a, A[3].b + A[4].b]
+      const sh = (a, i) => (a[i] / R[i]) * 100,
+        vr = (a) => P(a[1] / a[0] - 1)
+      const mgb = [(V.lb[0] / R[0]) * 100, (V.lb[1] / R[1]) * 100]
+      Q('k0').innerHTML =
+        kp('ROL 2025', 'R$ ' + F(R[1]), vr(R) + ' vs 2024 (R$ ' + F(R[0]) + ' mi)', 'pos') +
+        kp('Margem bruta', F(mgb[1]) + '%', '2024: ' + F(mgb[0]) + '%', 'pos') +
+        kp('Lucro líquido', 'R$ ' + F(V.ll[1]), vr(V.ll) + ' vs 2024', 'pos') +
+        kp(
+          'Receita digital',
+          F(sh(dig, 1)) + '% do ROL',
+          '2024: ' + F(sh(dig, 0)) + '% · ' + vr(dig),
+          '',
+        ) +
+        kp(
+          'Maior canal',
+          'Atacado ' + F((A[0].b / R[1]) * 100, 0) + '%',
+          'R$ ' + F(A[0].b) + ' mi · ' + vr([A[0].a, A[0].b]),
+        ) +
+        kp('Top 10 clientes', '53,3% do ROL', 'concentração moderada')
+      mk(
+        'cn',
+        bar(
+          A.map((x) => x.n.replace('Venda ', '')),
+          yy(A.map((x) => [x.a, x.b])),
+          { indexAxis: 'y' },
+        ),
+      )
+      mk('dre', bar(['ROL', 'CMV', 'Lucro bruto', 'Lucro líquido'], yy([V.rol, V.cmv, V.lb, V.ll])))
+      const tv = PL.map((_, i) => G(i)[1] - G(i)[0])
+      Q('vt').textContent = F(R[1] - R[0])
+      mk(
+        'wf',
+        bar(PL, [{ data: tv, backgroundColor: GC, borderRadius: 5 }], {
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: (c) => '+R$ ' + F(c.raw) + ' mi' } },
+          },
+        }),
+      )
+      const tp = [...PL.keys()].sort((a, b) => tv[b] - tv[a])
+      Q('ex').innerHTML = [
+        [
+          'ROL amarrado à DRE',
+          'R$ ' +
+            F(R[1]) +
+            ' mi em 2025 = soma das 6 contas de receita, sem diferença. Base: ROL consolidado do Projeto Corujão.',
+        ],
+        [
+          PL[tp[0]] + ' e ' + PL[tp[1]] + ' lideram o crescimento',
+          'Somam R$ ' +
+            F(tv[tp[0]] + tv[tp[1]]) +
+            ' mi dos R$ ' +
+            F(R[1] - R[0]) +
+            ' mi de aumento (' +
+            F(((tv[tp[0]] + tv[tp[1]]) / (R[1] - R[0])) * 100, 0) +
+            '%). Cabelos cresce ' +
+            P(G(3)[1] / G(3)[0] - 1) +
+            '.',
+        ],
+        [
+          'Digital já pesa ' + F(sh(dig, 1), 0) + '% do ROL',
+          'Parte do crescimento do Marketplaces é reclassificação do E-commerce próprio; o digital somado cresce ' +
+            vr(dig) +
+            '.',
+        ],
+        [
+          'Comparabilidade 2024 × 2025',
+          'Vendas intercompany só foram eliminadas a partir de mai/25 (Corujão): o ROL consolidado cresce +19,6%, mas a base combinada cresce +27,1%.',
+        ],
+      ]
+        .map((x) => `<div class="in"><b>${x[0]}</b>${x[1]}</div>`)
+        .join('')
+      // Receita
+      const mixc = (id, i, t) =>
+        mk(id, {
+          type: 'doughnut',
+          data: { labels: PL, datasets: [{ data: G2(i), backgroundColor: GC, borderWidth: 0 }] },
+          options: {
+            cutout: '58%',
+            plugins: {
+              title: { display: true, text: t },
+              tooltip: {
+                callbacks: {
+                  label: (c) => c.label + ': ' + F(c.raw) + ' (' + F((c.raw / R[i]) * 100) + '%)',
+                },
+              },
+            },
+          },
+        })
+      function G2(i) {
+        return D.gt[i]
+      }
+      mixc('m24', 0, '2024')
+      mixc('m25', 1, '2025')
+      function acv(v) {
+        let L, a, b
+        if (v == 'Por conta contábil') {
+          L = A.map((x) => x.n.replace('Venda ', ''))
+          a = A.map((x) => x.a)
+          b = A.map((x) => x.b)
+        } else {
+          L = [
+            'Atacado',
+            'Varejo – Lojas',
+            'Franquias',
+            'Digital (E-com + Marketplaces)',
+            'Royalties e Serviços',
+          ]
+          a = [A[0].a, A[1].a, A[2].a, dig[0], A[5].a]
+          b = [A[0].b, A[1].b, A[2].b, dig[1], A[5].b]
+        }
+        mk(
+          'ac',
+          bar(
+            L,
+            [
+              { label: '2024', data: a, backgroundColor: C24, borderRadius: 4 },
+              { label: '2025', data: b, backgroundColor: C25, borderRadius: 4 },
+            ],
+            { indexAxis: 'y' },
+          ),
+        )
+      }
+      tgl('vw', ['Por conta contábil', 'Por canal (ajustado)'], acv, 'Por canal (ajustado)')
+      function mov(v) {
+        let ds
+        if (v == 'Por linha de produto')
+          ds = PL.map((p, i) => ({ label: p, data: D.mp[p], backgroundColor: GC[i] }))
+        else
+          ds = Object.keys(D.mch).map((k, i) => ({
+            label: k.replace('Venda ', ''),
+            data: D.mch[k],
+            backgroundColor: GC[i],
+          }))
+        mk('mo', {
+          type: 'bar',
+          data: { labels: mes, datasets: ds },
+          options: {
+            scales: { x: { stacked: true }, y: { stacked: true } },
+            interaction: { mode: 'index' },
+            plugins: {
+              tooltip: { callbacks: { label: (c) => c.dataset.label + ': ' + F(c.raw) } },
+            },
+          },
+        })
+      }
+      tgl('mv', ['Por linha de produto', 'Por canal'], mov, 'Por canal')
+      const tm = mes.map((_, m) => PL.reduce((s, p) => s + D.mp[p][m], 0)),
+        mm = tm.map((x, i) => (i ? (x / tm[i - 1] - 1) * 100 : null))
+      mk('vo', {
+        data: {
+          labels: mes,
+          datasets: [
+            {
+              type: 'bar',
+              label: 'ROL (R$ mi)',
+              data: tm,
+              backgroundColor: C25,
+              borderRadius: 4,
+              yAxisID: 'y',
+            },
+            {
+              type: 'line',
+              label: 'Var. m/m (%)',
+              data: mm,
+              borderColor: '#d97706',
+              backgroundColor: '#d97706',
+              yAxisID: 'y1',
+              tension: 0.25,
+            },
+          ],
+        },
+        options: { scales: { y1: { position: 'right', grid: { display: false } } } },
+      })
+      // Clientes
+      const CL = D.clients
+      function top10(o) {
+        const v = (c) => (o == 'Todos' ? c.t : c.by[o]),
+          L = [...CL]
+            .filter((c) => v(c) > 0.05)
+            .sort((a, b) => v(b) - v(a))
+            .slice(0, 10),
+          tot = o == 'Todos' ? R[1] : D.gt[1][PL.indexOf(o)]
+        return {
+          n: [...L.map((c) => c.n), 'Demais clientes e consumidor final'],
+          v: [...L.map(v), tot - L.reduce((s, c) => s + v(c), 0)],
+          tot,
+        }
+      }
+      function cli(o) {
+        const r = top10(o)
+        mk('cp', {
+          type: 'doughnut',
+          data: { labels: r.n, datasets: [{ data: r.v, backgroundColor: RAMP, borderWidth: 0 }] },
+          options: {
+            cutout: '55%',
+            plugins: {
+              legend: { position: 'right' },
+              tooltip: {
+                callbacks: {
+                  label: (c) => c.label + ': ' + F(c.raw) + ' (' + F((c.raw / r.tot) * 100) + '%)',
+                },
+              },
+            },
+          },
+        })
+        mk(
+          'cb',
+          bar(r.n, [{ data: r.v, backgroundColor: RAMP, borderRadius: 4 }], {
+            indexAxis: 'y',
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: (c) => 'R$ ' + F(c.raw) + ' mi' } },
+            },
+          }),
+        )
+        Q('cc').textContent =
+          'Top 3 = ' +
+          F((r.v.slice(0, 3).reduce((a, b) => a + b) / r.tot) * 100) +
+          '% · Top 10 = ' +
+          F((r.v.slice(0, 10).reduce((a, b) => a + b) / r.tot) * 100) +
+          '% do ROL (' +
+          o +
+          ')'
+      }
+      tgl('cf', ['Todos', ...PL.slice(0, 5)], cli, 'Todos')
+      Q('ct').innerHTML =
+        '<tr><th>Cliente</th><th>Canal</th>' +
+        PL.slice(0, 5)
+          .map((g) => `<th>${g}</th>`)
+          .join('') +
+        '<th>Total</th><th>% ROL</th></tr>' +
+        [...CL]
+          .sort((a, b) => b.t - a.t)
+          .map(
+            (c) =>
+              `<tr><td>${c.n}</td><td style="text-align:left">${c.ch.replace('Venda ', '')}</td>${PL.slice(
+                0,
+                5,
+              )
+                .map((g) => `<td>${F(c.by[g])}</td>`)
+                .join('')}<td>${F(c.t)}</td><td>${F((c.t / R[1]) * 100)}%</td></tr>`,
+          )
+          .join('')
+      // Amarração
+      const k = (x) => F(x * 1000, 0)
+      Q('tie').innerHTML =
+        '<tr><th>R$ mil</th><th>2024</th><th>2025</th><th>Var. R$</th><th>Var. %</th></tr>' +
+        A.map(
+          (x) =>
+            `<tr><td style="text-align:left">${x.c} ${x.n}</td><td>${k(x.a)}</td><td>${k(x.b)}</td><td>${k(x.b - x.a)}</td><td>${x.a ? P(x.b / x.a - 1) : 'novo'}</td></tr>`,
+        ).join('') +
+        `<tr class="t"><td>Total composição</td><td>${k(R[0])}</td><td>${k(R[1])}</td><td>${k(R[1] - R[0])}</td><td>${P(R[1] / R[0] - 1)}</td></tr><tr><td style="text-align:left">ROL consolidado (DRE Corujão)</td><td>94.101</td><td>112.545</td><td colspan=2 class="pos">diferença 0 ✓</td></tr>`
+      Q('tb').innerHTML =
+        '<tr><th>Linha de produto</th><th>2024</th><th>2025</th><th>Var. R$ mi</th><th>Var. %</th><th>% ROL 2025</th></tr>' +
+        PL.map((p, i) => {
+          const g = G(i)
+          return `<tr><td>${p}</td><td>${F(g[0])}</td><td>${F(g[1])}</td><td class="pos">${F(g[1] - g[0])}</td><td>${P(g[1] / g[0] - 1)}</td><td>${F((g[1] / R[1]) * 100)}%</td></tr>`
+        }).join('') +
+        `<tr class="t"><td>Total</td><td>${F(R[0])}</td><td>${F(R[1])}</td><td>${F(R[1] - R[0])}</td><td>${P(R[1] / R[0] - 1)}</td><td>100,0%</td></tr>`
+      Q('st').innerHTML = [
+        [
+          '1. ROL de R$ ' + F(R[0]) + ' mi para R$ ' + F(R[1]) + ' mi (' + vr(R) + ')',
+          'Crescimento puxado por ' +
+            PL[tp[0]] +
+            ', ' +
+            PL[tp[1]] +
+            ' e ' +
+            PL[tp[2]] +
+            '. A base 2024 é combinada, sem eliminações intercompany rastreadas.',
+        ],
+        [
+          '2. Reclassificação no digital',
+          'A conta Marketplaces nasce em 2025 (R$ ' +
+            F(A[4].b) +
+            ' mi) enquanto E-commerce próprio recua ' +
+            P(A[3].b / A[3].a - 1) +
+            '. Somados, o digital cresce ' +
+            vr(dig) +
+            ': a leitura conta a conta superestima as quedas e as altas.',
+        ],
+        [
+          '3. Sazonalidade típica de cosméticos',
+          'Pico em maio (Dia das Mães) e em novembro (Black Friday), com dezembro abaixo de novembro. Devoluções de R$ 1,0 mi em dez/25 (Corujão) merecem checagem de corte.',
+        ],
+        [
+          '4. Qualidade do crescimento',
+          'Margem bruta sobe de ' +
+            F(mgb[0]) +
+            '% para ' +
+            F(mgb[1]) +
+            '%, mas há efeito de eliminações a partir de mai/25. A leitura recorrente deve usar a base comparável.',
+        ],
+      ]
+        .map((x) => `<div class="in"><b>${x[0]}</b>${x[1]}</div>`)
+        .join('')
+      Q('ft').textContent =
+        'Empresa-modelo ABC: contas, clientes e valores por canal, linha de produto e mês são fictícios, construídos para fechar com o ROL consolidado (DRE) e as eliminações do Projeto Corujão. Clientes têm nomes fantasia. Estrutura espelha a análise de receita da Posidonia.'
+      tabs()
+      sel(0)
+    </script>
+  </body>
+</html>

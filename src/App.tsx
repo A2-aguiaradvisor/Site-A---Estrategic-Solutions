@@ -10,6 +10,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 // Public & Catalog Pages
 import Index from '@/pages/Index'
 import Catalogo from '@/pages/Catalogo'
+import AbcRevenueDashboardPage from '@/pages/AbcRevenueDashboardPage'
 import ProductDetail from '@/pages/ProductDetail'
 import Cart from '@/pages/Cart'
 
@@ -41,7 +42,8 @@ const App = () => (
             <Route element={<Layout />}>
               <Route path="/" element={<Index />} />
               <Route path="/catalogo" element={<Catalogo />} />
-              <Route path="/produtos" element={<Catalogo />} />
+              <Route path="/produtos" element={<AbcRevenueDashboardPage />} />
+              <Route path="/dashboard" element={<AbcRevenueDashboardPage />} />
               <Route path="/produto/:id" element={<ProductDetail />} />
               <Route path="/carrinho" element={<Cart />} />
 
