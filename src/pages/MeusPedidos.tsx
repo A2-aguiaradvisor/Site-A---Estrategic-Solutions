@@ -16,6 +16,7 @@ import {
   Clock,
   XCircle,
 } from 'lucide-react'
+import { OrderFlowE2ETester } from '@/components/OrderFlowE2ETester'
 
 export default function MeusPedidos() {
   const [orders, setOrders] = useState<Order[]>([])
@@ -115,6 +116,9 @@ export default function MeusPedidos() {
           Acompanhe o status e os detalhes das suas consultorias e materiais contratados
         </p>
       </div>
+
+      {/* Interactive E2E Order Flow Tester directly accessible on preview */}
+      <OrderFlowE2ETester />
 
       {orders.length === 0 ? (
         <div className="bg-white rounded-2xl border border-[#E2E8F0] p-12 text-center max-w-xl mx-auto shadow-card-rest">

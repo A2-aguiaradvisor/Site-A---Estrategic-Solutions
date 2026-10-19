@@ -37,8 +37,11 @@ export function getProductImageUrl(product: Product): string {
   }
   // Technological Dashboards & Analytics images matching LeverPro standards
   const queryMap: Record<string, string> = {
-    Mentoria: 'dashboard analytics screen',
+    'Produto de Entrada': 'spreadsheet financial data',
+    Box: 'financial model chart',
     Curso: 'financial data chart',
+    Mentoria: 'executive advisor meeting',
+    Serviços: 'executive corporate analytics',
     'E-book': 'business metrics report',
     Serviço: 'executive trading monitor',
   }

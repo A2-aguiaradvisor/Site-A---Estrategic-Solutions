@@ -13,9 +13,9 @@ export async function createOrder(params: CreateOrderParams): Promise<Order> {
     throw new Error('Você precisa estar autenticado para finalizar o pedido.')
   }
 
-  // Generate unique order code e.g. AG-2026-XXXX
+  // Generate unique order code e.g. AG-2026-XXXX (or timestamp suffix to guarantee uniqueness)
   const currentYear = new Date().getFullYear()
-  const randomSuffix = Math.floor(1000 + Math.random() * 9000)
+  const randomSuffix = Math.floor(100000 + Math.random() * 900000)
   const orderCode = `AG-${currentYear}-${randomSuffix}`
 
   const record = await pb.collection('orders').create<Order>({
@@ -23,7 +23,7 @@ export async function createOrder(params: CreateOrderParams): Promise<Order> {
     order_code: orderCode,
     status: 'paid', // Simulated online payment is instantly approved
     payment_method: params.paymentMethod,
-    total: params.total,
+    total: Number(params.total.toFixed(2)),
     items_json: JSON.stringify(params.items),
   })
 

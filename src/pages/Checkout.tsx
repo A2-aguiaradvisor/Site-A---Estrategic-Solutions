@@ -20,21 +20,41 @@ import {
 
 export default function Checkout() {
   const { items, subtotal, clearCart } = useCart()
-  const { user } = useAuth()
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
 
+  // Ensure user is authenticated
+  React.useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      navigate('/entrar', { state: { from: { pathname: '/checkout' } }, replace: true })
+    }
+  }, [authLoading, isAuthenticated, navigate])
+
   // Form states
   const [fullName, setFullName] = useState(user?.name || '')
-  const [email] = useState(user?.email || '')
+  const [email, setEmail] = useState(user?.email || '')
   const [notes, setNotes] = useState('')
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('credit_card')
 
   // Credit card inputs (simulated)
   const [cardNumber, setCardNumber] = useState('4532 •••• •••• 8821')
-  const [cardName, setCardName] = useState(user?.name || 'VINICIUS AGUIAR')
+  const [cardName, setCardName] = useState(user?.name ? user.name.toUpperCase() : 'VINICIUS AGUIAR')
   const [cardExpiry, setCardExpiry] = useState('12/28')
   const [cardCvv, setCardCvv] = useState('882')
+
+  // Synchronize user profile if loaded asynchronously
+  React.useEffect(() => {
+    if (user?.email && !email) {
+      setEmail(user.email)
+    }
+    if (user?.name && !fullName) {
+      setFullName(user.name)
+    }
+    if (user?.name && cardName === 'VINICIUS AGUIAR') {
+      setCardName(user.name.toUpperCase())
+    }
+  }, [user, email, fullName, cardName])
 
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
