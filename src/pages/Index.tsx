@@ -112,10 +112,6 @@ export default function Index() {
             </h1>
 
             {/* Factual Subheadline referencing real product ladder */}
-            <p className="max-w-3xl mx-auto text-base sm:text-lg text-slate-300 font-normal leading-relaxed mb-8">
-              Do produto de entrada e modelagem analítica à formação executiva e consultoria
-              estruturada nas quatro frentes de atuação corporativa.
-            </p>
 
             {/* Product ladder quick chips */}
             <div className="flex flex-wrap items-center justify-center gap-2 mb-8 max-w-2xl mx-auto text-xs">

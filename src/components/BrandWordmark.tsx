@@ -29,13 +29,6 @@ export const BrandWordmark: React.FC<BrandWordmarkProps> = ({ className = '', li
       {/* Brand name text: "A²" removed here because the zoomed eagle emblem already contains A² in metallic silver */}
       <div className="flex flex-col leading-tight">
         <span
-          className={`text-sm sm:text-base font-extrabold tracking-wide uppercase ${
-            light ? 'text-slate-100' : 'text-[#1F3A5F]'
-          }`}
-        >
-          STRATEGIC
-        </span>
-        <span
           className={`text-[10px] sm:text-[11px] font-bold tracking-[0.28em] uppercase ${
             light ? 'text-[#E1A63E]' : 'text-[#B47517]'
           }`}
