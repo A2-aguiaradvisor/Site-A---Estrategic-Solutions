@@ -392,11 +392,11 @@ export default function Layout() {
                 Dúvidas sobre programas de mentoria institucional ou assessoria sob medida:
               </p>
               <a
-                href="mailto:contato@a2strategic.com.br"
+                href="mailto:aguiaradvisor@gmail.com"
                 className="inline-flex items-center gap-2 text-sm text-[#E1A63E] hover:text-yellow-300 font-semibold transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                contato@a2strategic.com.br
+                aguiaradvisor@gmail.com
               </a>
               <div className="mt-4 p-3 bg-slate-900/80 rounded-lg border border-slate-800 text-xs text-slate-400">
                 <span className="font-semibold text-slate-300">Horário executivo:</span> Seg. a Sex.
