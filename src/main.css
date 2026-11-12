@@ -169,4 +169,73 @@
   .bg-brand-gold {
     background-color: #e1a63e;
   }
+
+  /* ── Home redesign animations (referência Dribbble Zajno) ─────────────── */
+
+  @keyframes hero-pulse-dot {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(96, 165, 250, 0.55);
+      opacity: 1;
+    }
+    50% {
+      box-shadow: 0 0 0 7px rgba(96, 165, 250, 0);
+      opacity: 0.75;
+    }
+  }
+
+  .hero-pulse-dot {
+    animation: hero-pulse-dot 2.2s ease-in-out infinite;
+  }
+
+  @keyframes hero-dash-flow {
+    to {
+      stroke-dashoffset: -40;
+    }
+  }
+
+  .hero-dash-flow {
+    animation: hero-dash-flow 1.6s linear infinite;
+  }
+
+  @keyframes hub-rings {
+    0% {
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: scale(0.9);
+      opacity: 0.55;
+    }
+    70% {
+      opacity: 0.1;
+    }
+    100% {
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: scale(1.25);
+      opacity: 0;
+    }
+  }
+
+  .hub-rings {
+    animation: hub-rings 2.6s ease-out infinite;
+  }
+
+  @keyframes hero-fade-slide {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-pulse-dot,
+    .hero-dash-flow,
+    .hub-rings {
+      animation: none !important;
+    }
+  }
 }
