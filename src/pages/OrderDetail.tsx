@@ -16,6 +16,8 @@ import {
   Clock,
   XCircle,
   FileSpreadsheet,
+  Repeat,
+  TicketPercent,
 } from 'lucide-react'
 
 export default function OrderDetail() {
@@ -216,14 +218,38 @@ export default function OrderDetail() {
               <div className="space-y-3 text-xs">
                 <div className="flex justify-between text-slate-600">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-slate-800">{formatBRL(order.total)}</span>
+                  <span className="font-semibold text-slate-800">
+                    {formatBRL(order.total + (order.discount_amount ?? 0))}
+                  </span>
                 </div>
+                {order.coupon_code && (order.discount_amount ?? 0) > 0 && (
+                  <div className="flex justify-between text-slate-600">
+                    <span className="inline-flex items-center gap-1.5">
+                      <TicketPercent className="w-3.5 h-3.5 text-[#E1A63E]" />
+                      Cupom {order.coupon_code}
+                    </span>
+                    <span className="font-semibold text-emerald-600">
+                      −{formatBRL(order.discount_amount ?? 0)}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between text-slate-600">
                   <span>Frete & Envio Digital</span>
                   <span className="font-semibold text-emerald-600 uppercase text-[11px]">
                     Grátis
                   </span>
                 </div>
+                {order.subscription_period && (
+                  <div className="flex justify-between text-slate-600">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Repeat className="w-3.5 h-3.5 text-[#2563EB]" />
+                      Assinatura
+                    </span>
+                    <span className="font-semibold text-slate-800 capitalize">
+                      {order.subscription_period}
+                    </span>
+                  </div>
+                )}
                 <div className="pt-3 border-t border-slate-100 flex justify-between items-baseline">
                   <span className="text-sm font-bold text-[#1F3A5F]">Total Pago</span>
                   <span className="text-2xl font-black text-[#1F3A5F]">

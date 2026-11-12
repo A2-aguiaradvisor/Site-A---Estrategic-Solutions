@@ -11,6 +11,8 @@ import {
   ShieldCheck,
   Mail,
   ArrowRight,
+  LayoutGrid,
+  BarChart3,
 } from 'lucide-react'
 import { BrandWordmark } from '@/components/BrandWordmark'
 import { useAuth } from '@/contexts/AuthContext'
@@ -24,6 +26,65 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+
+interface NavLeaf {
+  label: string
+  path: string
+  icon: React.ComponentType<{ className?: string }>
+  description?: string
+  requiresAuth?: boolean
+}
+
+interface NavGroup {
+  label: string
+  items: NavLeaf[]
+}
+
+/** Grupos da navegação hierárquica (desktop dropdown + mobile drawer). */
+const NAV_GROUPS: NavGroup[] = [
+  {
+    label: 'Soluções',
+    items: [
+      {
+        label: 'Catálogo de Soluções',
+        path: '/catalogo',
+        icon: LayoutGrid,
+        description: 'Todos os programas e produtos digitais',
+      },
+      {
+        label: 'Dashboard ABC de Receita',
+        path: '/dashboard',
+        icon: BarChart3,
+        description: 'Demonstração interativa de inteligência de dados',
+      },
+      {
+        label: 'Carrinho de Compras',
+        path: '/carrinho',
+        icon: ShoppingBag,
+        description: 'Revise os itens selecionados',
+      },
+    ],
+  },
+  {
+    label: 'Minha Área',
+    items: [
+      {
+        label: 'Meus Pedidos',
+        path: '/meus-pedidos',
+        icon: Package,
+        description: 'Histórico e status das contratações',
+        requiresAuth: true,
+      },
+      {
+        label: 'Minha Conta',
+        path: '/minha-conta',
+        icon: UserIcon,
+        description: 'Dados, senha e segurança',
+        requiresAuth: true,
+      },
+    ],
+  },
+]
 
 export default function Layout() {
   const { user, isAuthenticated, signOut } = useAuth()
@@ -41,23 +102,43 @@ export default function Layout() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu on route change
+  // Close mobile drawer on route change
   useEffect(() => {
     setMobileMenuOpen(false)
   }, [location.pathname])
+
+  // Lock body scroll while the mobile drawer is open
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [mobileMenuOpen])
+
+  // Close drawer with Escape
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [mobileMenuOpen])
 
   const handleSignOut = () => {
     signOut()
     navigate('/')
   }
 
-  const navLinks = [
-    { label: 'Início', path: '/' },
-    { label: 'Catálogo', path: '/catalogo' },
-    { label: 'Produtos (Dashboard)', path: '/produtos' },
-    { label: 'Minha Conta', path: '/minha-conta', requiresAuth: true },
-    { label: 'Meus Pedidos', path: '/meus-pedidos', requiresAuth: true },
-  ]
+  const visibleGroups = NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => !item.requiresAuth || isAuthenticated),
+  })).filter((group) => group.items.length > 0)
+
+  const isGroupActive = (group: NavGroup) =>
+    group.items.some((item) => location.pathname === item.path)
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F8FAFC] text-[#0F172A] selection:bg-[#2563EB] selection:text-white">
@@ -76,30 +157,91 @@ export default function Layout() {
               <BrandWordmark />
             </div>
 
-            {/* Desktop Navigation Menu (Center/Right) */}
-            <nav className="hidden md:flex items-center gap-8">
-              {navLinks.map((link) => {
-                if (link.requiresAuth && !isAuthenticated) return null
-                const isActive = location.pathname === link.path && !location.hash
-                return (
-                  <NavLink
-                    key={link.path}
-                    to={link.path}
-                    className={`relative text-sm font-semibold transition-colors py-1 hover:text-[#2563EB] ${
-                      isActive ? 'text-[#2563EB]' : 'text-[#1F3A5F]'
-                    }`}
-                  >
-                    {link.label}
+            {/* Desktop Navigation: hierarchic dropdowns */}
+            <nav className="hidden md:flex items-center gap-6" aria-label="Navegação principal">
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  `relative text-sm font-semibold transition-colors py-1 hover:text-[#2563EB] ${
+                    isActive ? 'text-[#2563EB]' : 'text-[#1F3A5F]'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    Início
                     {isActive && (
                       <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2563EB] rounded-full animate-fade-in" />
                     )}
-                  </NavLink>
-                )
-              })}
+                  </>
+                )}
+              </NavLink>
+
+              {visibleGroups.map((group) => (
+                <DropdownMenu key={group.label}>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      aria-expanded={false}
+                      aria-label={`Menu ${group.label}`}
+                      className={`flex items-center gap-1.5 text-sm font-semibold transition-colors py-1 hover:text-[#2563EB] focus:outline-none ${
+                        isGroupActive(group) ? 'text-[#2563EB]' : 'text-[#1F3A5F]'
+                      }`}
+                    >
+                      {group.label}
+                      <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="start"
+                    sideOffset={14}
+                    className="w-72 p-1.5 rounded-xl shadow-modal border-[#E2E8F0]"
+                  >
+                    <DropdownMenuLabel className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                      {group.label}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator className="bg-slate-100" />
+                    {group.items.map((item) => {
+                      const Icon = item.icon
+                      const isActive = location.pathname === item.path
+                      return (
+                        <DropdownMenuItem
+                          key={item.path}
+                          onClick={() => navigate(item.path)}
+                          className={`cursor-pointer gap-3 px-3 py-2.5 rounded-lg ${
+                            isActive
+                              ? 'bg-blue-50 text-[#2563EB]'
+                              : 'text-[#1F3A5F] hover:bg-blue-50 hover:text-[#2563EB]'
+                          }`}
+                        >
+                          <span
+                            className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${
+                              isActive ? 'bg-[#2563EB] text-white' : 'bg-slate-100 text-[#1F3A5F]'
+                            }`}
+                          >
+                            <Icon className="w-4 h-4" />
+                          </span>
+                          <span className="min-w-0">
+                            <span className="block text-sm font-semibold leading-tight">
+                              {item.label}
+                            </span>
+                            {item.description && (
+                              <span className="block text-[11px] text-slate-500 leading-snug mt-0.5">
+                                {item.description}
+                              </span>
+                            )}
+                          </span>
+                        </DropdownMenuItem>
+                      )
+                    })}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ))}
             </nav>
 
             {/* Right Actions: Cart & User */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
               {/* Cart Button */}
               <Link
                 to="/carrinho"
@@ -192,111 +334,116 @@ export default function Layout() {
               <div className="flex md:hidden">
                 <button
                   type="button"
-                  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  onClick={() => setMobileMenuOpen(true)}
                   aria-label="Abrir menu"
+                  aria-expanded={mobileMenuOpen}
                   className="p-2 text-[#1F3A5F] hover:bg-slate-100 rounded-lg transition-colors"
                 >
-                  {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                  <Menu className="w-6 h-6" />
                 </button>
               </div>
             </div>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Slide-in Drawer */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-[#E2E8F0] bg-white px-4 pt-3 pb-6 shadow-xl animate-fade-in-down">
-            <div className="flex flex-col space-y-2">
-              <NavLink
-                to="/"
+      {/* Mobile Drawer (right slide-over, organized in sections) */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true">
+          <div
+            className="absolute inset-0 bg-[#030C1E]/60 backdrop-blur-sm animate-fade-in"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <aside className="absolute right-0 top-0 bottom-0 w-[86%] max-w-sm bg-white shadow-modal flex flex-col animate-slide-in-right">
+            <div className="flex items-center justify-between px-5 h-20 border-b border-[#E2E8F0]">
+              <BrandWordmark />
+              <button
+                type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
+                aria-label="Fechar menu"
+                className="p-2 text-[#1F3A5F] hover:bg-slate-100 rounded-lg transition-colors"
               >
-                Início
-              </NavLink>
-              <NavLink
-                to="/catalogo"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
-              >
-                Catálogo
-              </NavLink>
-              <NavLink
-                to="/produtos"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
-              >
-                Produtos (Dashboard)
-              </NavLink>
-              <NavLink
-                to="/carrinho"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center justify-between px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
-              >
-                <span>Carrinho</span>
-                {itemCount > 0 && (
-                  <span className="px-2 py-0.5 text-xs font-bold text-white bg-[#DC2626] rounded-full">
-                    {itemCount}
-                  </span>
-                )}
-              </NavLink>
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-4 py-5 space-y-6">
+              <section>
+                <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                  Navegação
+                </p>
+                <div className="flex flex-col gap-1">
+                  <MobileNavLink to="/" label="Início" />
+                  {NAV_GROUPS[0].items.map((item) => (
+                    <MobileNavLink
+                      key={item.path}
+                      to={item.path}
+                      label={item.label}
+                      icon={<item.icon className="w-5 h-5 text-[#2563EB]" />}
+                      badge={item.path === '/carrinho' && itemCount > 0 ? itemCount : undefined}
+                    />
+                  ))}
+                </div>
+              </section>
 
               {isAuthenticated && user ? (
-                <>
-                  <div className="pt-2 pb-1 border-t border-slate-100">
-                    <p className="px-3 text-xs font-bold uppercase tracking-wider text-slate-400">
-                      Sua Conta
-                    </p>
+                <section>
+                  <p className="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 border-t border-slate-100 pt-5">
+                    Sua Conta
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    {NAV_GROUPS[1].items.map((item) => (
+                      <MobileNavLink
+                        key={item.path}
+                        to={item.path}
+                        label={item.label}
+                        icon={<item.icon className="w-5 h-5 text-[#2563EB]" />}
+                      />
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMobileMenuOpen(false)
+                        handleSignOut()
+                      }}
+                      className="flex items-center gap-3 w-full text-left px-3 py-3 text-base font-semibold text-[#DC2626] hover:bg-red-50 rounded-xl transition-colors"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      Sair
+                    </button>
                   </div>
-                  <NavLink
-                    to="/meus-pedidos"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
-                  >
-                    <Package className="w-5 h-5 text-[#2563EB]" />
-                    Meus Pedidos
-                  </NavLink>
-                  <NavLink
-                    to="/minha-conta"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2.5 text-base font-semibold text-[#1F3A5F] hover:bg-slate-50 rounded-lg"
-                  >
-                    <UserIcon className="w-5 h-5 text-[#2563EB]" />
-                    Minha Conta
-                  </NavLink>
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false)
-                      handleSignOut()
-                    }}
-                    className="flex items-center gap-2.5 w-full text-left px-3 py-2.5 text-base font-semibold text-[#DC2626] hover:bg-red-50 rounded-lg"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    Sair ({user.email})
-                  </button>
-                </>
+                </section>
               ) : (
-                <div className="pt-4 mt-2 border-t border-slate-100 flex flex-col gap-2">
+                <section className="border-t border-slate-100 pt-5 flex flex-col gap-2">
                   <Link
                     to="/entrar"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center py-2.5 border border-[#2563EB] text-[#1F3A5F] font-semibold rounded-lg hover:bg-blue-50"
+                    className="w-full text-center py-3 border border-[#2563EB] text-[#1F3A5F] font-semibold rounded-xl hover:bg-blue-50 transition-colors"
                   >
                     Entrar
                   </Link>
                   <Link
                     to="/criar-conta"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-full text-center py-2.5 bg-[#1F3A5F] text-white font-semibold rounded-lg shadow-sm hover:bg-[#17304F]"
+                    className="w-full text-center py-3 bg-[#1F3A5F] text-white font-semibold rounded-xl shadow-sm hover:bg-[#17304F] transition-colors"
                   >
                     Criar conta
                   </Link>
-                </div>
+                </section>
               )}
             </div>
-          </div>
-        )}
-      </header>
+
+            <div className="px-5 py-4 border-t border-[#E2E8F0] bg-slate-50">
+              <a
+                href="mailto:aguiaradvisor@gmail.com"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-[#1F3A5F] hover:text-[#2563EB] transition-colors"
+              >
+                <Mail className="w-4 h-4 text-[#E1A63E]" />
+                aguiaradvisor@gmail.com
+              </a>
+            </div>
+          </aside>
+        </div>
+      )}
 
       {/* Main Content Area */}
       <main className="flex-1 pt-20">
@@ -417,5 +564,43 @@ export default function Layout() {
         </div>
       </footer>
     </div>
+  )
+}
+
+/** Item de link do drawer mobile, com destaque de rota ativa. */
+function MobileNavLink({
+  to,
+  label,
+  icon,
+  badge,
+}: {
+  to: string
+  label: string
+  icon?: React.ReactNode
+  badge?: number
+}) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-3 py-3 text-base font-semibold rounded-xl transition-colors ${
+          isActive ? 'bg-blue-50 text-[#2563EB]' : 'text-[#1F3A5F] hover:bg-slate-50'
+        }`
+      }
+    >
+      {({ isActive }) => (
+        <>
+          {icon ?? (
+            <ArrowRight className={`w-4 h-4 ${isActive ? 'text-[#2563EB]' : 'text-[#E1A63E]'}`} />
+          )}
+          <span className="flex-1">{label}</span>
+          {typeof badge === 'number' && (
+            <span className="inline-flex items-center justify-center min-w-[22px] h-5 px-1.5 text-xs font-bold text-white bg-[#DC2626] rounded-full">
+              {badge}
+            </span>
+          )}
+        </>
+      )}
+    </NavLink>
   )
 }

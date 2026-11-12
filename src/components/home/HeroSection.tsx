@@ -39,8 +39,8 @@ function HeroKpi({
   }, [])
 
   const animated = visible || reduced
-  const count = useCountUp(value, animated ? 1400 : 0, reduced)
-  const display = animated ? count : 0
+  const count = useCountUp(value, animated && !reduced, reduced ? 0 : 1400)
+  const display = count
 
   return (
     <div ref={ref} className="text-left">
