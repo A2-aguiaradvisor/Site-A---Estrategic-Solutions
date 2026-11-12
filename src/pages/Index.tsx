@@ -4,29 +4,21 @@ import type { Product } from '@/types'
 import { getProducts } from '@/services/products'
 import { ProductCard } from '@/components/ProductCard'
 import { FinancialInteractiveDashboard } from '@/components/FinancialInteractiveDashboard'
-import { TechDemoVideoEmbed } from '@/components/TechDemoVideoEmbed'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   TrendingUp,
   Award,
   BookOpen,
   ArrowRight,
-  Sparkles,
-  Cpu,
   Layers,
-  CheckCircle2,
   Loader2,
   PackageSearch,
-  FileSpreadsheet,
-  Boxes,
-  GraduationCap,
-  Users2,
-  Briefcase,
 } from 'lucide-react'
 import { Reveal } from '@/components/home/Reveal'
-import { HeroChart } from '@/components/home/HeroChart'
+import { HeroSection } from '@/components/home/HeroSection'
 import { CredibilityCounters } from '@/components/home/CredibilityCounters'
 import { ServiceFrontsInfographic } from '@/components/home/ServiceFrontsInfographic'
+import { DashboardBuildShowcase } from '@/components/home/DashboardBuildShowcase'
 
 export default function Index() {
   const [products, setProducts] = useState<Product[]>([])
@@ -88,116 +80,19 @@ export default function Index() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* ───────────────────────── Hero (navy profundo, referência Dribbble) ───────────────────────── */}
-      <section className="relative overflow-hidden bg-[#030C1E] text-white pt-24 pb-20 sm:pt-32 sm:pb-28 border-b border-slate-800">
-        {/* Decorative glows & grid */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.28),transparent_65%)] pointer-events-none" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#E1A63E]/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute inset-0 opacity-[0.06] pointer-events-none bg-[linear-gradient(rgba(148,163,184,0.35)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.35)_1px,transparent_1px)] bg-[size:44px_44px]" />
+      {/* ───────────────────────── Hero v2 (canvas animado, contadores, navy profundo) ───────────────────────── */}
+      <HeroSection />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center mb-16 sm:mb-20">
-            {/* Left: headline & CTAs */}
-            <div className="lg:col-span-6 space-y-8">
-              <Reveal direction="up">
-                {/* Pill Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 text-[#E1A63E]" />
-                  <span className="text-xs font-bold tracking-widest text-slate-100 uppercase">
-                    A² Strategic Solutions
-                  </span>
-                </div>
-              </Reveal>
-
-              {/* Impactful Headline in Brand Navy & Gold */}
-              <Reveal direction="up" delay={120}>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.1]">
-                  Controladoria Estratégica &{' '}
-                  <span className="bg-gradient-to-r from-[#E1A63E] via-amber-200 to-[#E1A63E] bg-clip-text text-transparent drop-shadow-sm">
-                    Modelagem Financeira
-                  </span>
-                </h1>
-              </Reveal>
-
-              {/* Product ladder quick chips */}
-              <Reveal direction="up" delay={240}>
-                <div className="flex flex-wrap items-center gap-2 max-w-xl text-xs">
-                  <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
-                    <FileSpreadsheet className="w-3.5 h-3.5 text-[#E1A63E]" />
-                    Produtos de Entrada
-                  </span>
-                  <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
-                    <Boxes className="w-3.5 h-3.5 text-blue-400" />
-                    Box Modelagem
-                  </span>
-                  <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
-                    <GraduationCap className="w-3.5 h-3.5 text-indigo-400" />
-                    Curso de Controladoria
-                  </span>
-                  <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
-                    <Users2 className="w-3.5 h-3.5 text-amber-300" />
-                    Mentoria Executiva
-                  </span>
-                  <span className="px-3 py-1 rounded-lg bg-white/10 border border-white/15 text-slate-200 flex items-center gap-1.5">
-                    <Briefcase className="w-3.5 h-3.5 text-emerald-400" />
-                    Serviços Institucionais
-                  </span>
-                </div>
-              </Reveal>
-
-              {/* Action Buttons */}
-              <Reveal direction="up" delay={360}>
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-                  <button
-                    onClick={scrollToProducts}
-                    className="px-8 py-3.5 rounded-xl bg-white hover:bg-slate-100 text-[#0F1E36] font-bold text-sm shadow-xl transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2"
-                  >
-                    <span>Conhecer a Escada de Soluções</span>
-                    <ArrowRight className="w-4 h-4 text-[#2563EB]" />
-                  </button>
-                  <Link
-                    to="/catalogo"
-                    className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-blue-500 hover:to-blue-700 text-white font-bold text-sm shadow-lg transition-all duration-200 hover:-translate-y-0.5 flex items-center justify-center gap-2"
-                  >
-                    <span>Ver Catálogo</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </Reveal>
-            </div>
-
-            {/* Right: animated financial chart panel */}
-            <Reveal direction="left" delay={200} className="lg:col-span-6">
-              <div className="relative rounded-2xl border border-slate-700/70 bg-[#0A1526]/80 backdrop-blur-md p-4 sm:p-6 shadow-2xl">
-                <div className="absolute -top-px left-6 right-6 h-px bg-gradient-to-r from-transparent via-[#E1A63E]/70 to-transparent" />
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 hero-pulse-dot" />
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-slate-300">
-                      Receita & EBITDA • Simulação 12M
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#E1A63E]/15 text-[#E1A63E] border border-[#E1A63E]/30">
-                    A² Engine
-                  </span>
-                </div>
-                <div className="relative">
-                  <HeroChart />
-                </div>
-              </div>
-            </Reveal>
+      {/* Interactive Technology Showcase (Hero Interactive Dashboard) */}
+      <section className="bg-[#030C1E] pb-20 sm:pb-28 border-b border-slate-800">
+        <Reveal direction="up" delay={150}>
+          <div className="max-w-5xl mx-auto px-4">
+            <FinancialInteractiveDashboard
+              title="A² Strategic Engine • Simulação Executiva em Tempo Real"
+              defaultPeriod="12M"
+            />
           </div>
-
-          {/* Interactive Technology Showcase (Hero Interactive Dashboard) */}
-          <Reveal direction="up" delay={150}>
-            <div className="max-w-5xl mx-auto">
-              <FinancialInteractiveDashboard
-                title="A² Strategic Engine • Simulação Executiva em Tempo Real"
-                defaultPeriod="12M"
-              />
-            </div>
-          </Reveal>
-        </div>
+        </Reveal>
       </section>
 
       {/* Credibility counters (apenas fatos já presentes no site) */}
@@ -343,86 +238,7 @@ export default function Index() {
       </section>
 
       {/* Video & Platform Walkthrough Section */}
-      <section className="py-20 bg-[#0B1527] text-white border-b border-slate-800 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.15),transparent_60%)] pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left explanation */}
-            <Reveal direction="right" className="lg:col-span-5 space-y-6">
-              <div className="space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-[#E1A63E] uppercase tracking-wider">
-                  <Cpu className="w-3.5 h-3.5" />
-                  Tecnologia & Fechamento Ágil
-                </div>
-                <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight">
-                  Veja a inteligência estratégica acontecendo na prática.
-                </h2>
-                <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
-                  A <strong>A² Strategic Solutions</strong> combina rotinas de controladoria com
-                  modelos analíticos e visões interativas que conferem agilidade ao fechamento
-                  contábil e gerencial.
-                </p>
-
-                <div className="space-y-3 pt-2">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold text-white">DRE Gerencial em Minutos</h4>
-                      <p className="text-xs text-slate-400">
-                        Orçado vs. Realizado consolidado por centros de custo e unidades de negócio.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-[#E1A63E] flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold text-white">
-                        Valuation & Cenários Operacionais
-                      </h4>
-                      <p className="text-xs text-slate-400">
-                        Simulação de cenários (Conservador, Base, Otimista) com testes de estresse
-                        de liquidez.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <h4 className="text-sm font-bold text-white">
-                        Governança & Políticas Internas
-                      </h4>
-                      <p className="text-xs text-slate-400">
-                        Alçadas de aprovação, auditoria de processos e segregação estrita de
-                        funções.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <Link
-                    to="/catalogo"
-                    className="inline-flex items-center gap-2 text-sm font-bold text-[#E1A63E] hover:text-yellow-300 transition-colors"
-                  >
-                    <span>Conhecer todos os pacotes e mentoria</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </div>
-            </Reveal>
-
-            {/* Right Video Embed */}
-            <Reveal direction="left" delay={150} className="lg:col-span-7">
-              <div>
-                <TechDemoVideoEmbed />
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
+      <DashboardBuildShowcase />
 
       {/* CTA Section */}
       <section className="hero-gradient text-white py-16 sm:py-20 relative overflow-hidden">

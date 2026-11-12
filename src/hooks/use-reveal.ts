@@ -65,6 +65,10 @@ export function useCountUp(target: number, start: boolean, durationMs = 1600): n
       setValue(target)
       return
     }
+    if (durationMs <= 0) {
+      setValue(target)
+      return
+    }
 
     let raf = 0
     const startTime = performance.now()

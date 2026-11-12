@@ -231,6 +231,19 @@
     }
   }
 
+  /* ── Hero v2 (canvas + contadores) ─────────────────────────────────────── */
+
+  @keyframes fade-slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-pulse-dot,
     .hero-dash-flow,

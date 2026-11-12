@@ -1,10 +1,13 @@
 import pb from '@/lib/pocketbase/client'
-import type { Order, OrderItemSnapshot, PaymentMethod } from '@/types'
+import type { Order, OrderItemSnapshot, PaymentMethod, SubscriptionPeriod } from '@/types'
 
 export interface CreateOrderParams {
   paymentMethod: PaymentMethod
   items: OrderItemSnapshot[]
   total: number
+  couponCode?: string
+  discountAmount?: number
+  subscriptionPeriod?: SubscriptionPeriod
 }
 
 export async function createOrder(params: CreateOrderParams): Promise<Order> {
@@ -25,6 +28,9 @@ export async function createOrder(params: CreateOrderParams): Promise<Order> {
     payment_method: params.paymentMethod,
     total: Number(params.total.toFixed(2)),
     items_json: JSON.stringify(params.items),
+    coupon_code: params.couponCode || '',
+    discount_amount: Number((params.discountAmount || 0).toFixed(2)),
+    subscription_period: params.subscriptionPeriod || '',
   })
 
   return record

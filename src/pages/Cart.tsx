@@ -5,6 +5,8 @@ import { useAuth } from '@/contexts/AuthContext'
 import { useToast } from '@/hooks/use-toast'
 import { formatBRL } from '@/lib/formatters'
 import { getProductImageUrl } from '@/services/products'
+import { Repeat } from 'lucide-react'
+import type { SubscriptionPeriod } from '@/types'
 import {
   ShoppingBag,
   Trash2,
@@ -17,7 +19,8 @@ import {
 } from 'lucide-react'
 
 export default function Cart() {
-  const { items, subtotal, itemCount, updateQuantity, removeFromCart } = useCart()
+  const { items, subtotal, itemCount, updateQuantity, removeFromCart, setSubscriptionPeriod } =
+    useCart()
   const { isAuthenticated } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -80,9 +83,10 @@ export default function Cart() {
             </div>
 
             <ul className="divide-y divide-[#E2E8F0]">
-              {items.map(({ product, quantity }) => {
+              {items.map(({ product, quantity, subscription_period }) => {
                 const imageUrl = getProductImageUrl(product)
                 const lineTotal = product.price * quantity
+                const period: SubscriptionPeriod | undefined = subscription_period
 
                 return (
                   <li
@@ -115,12 +119,40 @@ export default function Cart() {
                         Unitário: {formatBRL(product.price)}
                       </p>
 
+                      {period && (
+                        <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[10px] font-bold text-[#2563EB] uppercase tracking-wide">
+                          <Repeat className="w-3 h-3" />
+                          Assinatura recorrente — {period}
+                        </span>
+                      )}
+
+                      {product.subscription_eligible && (
+                        <div className="mt-2 flex items-center gap-1.5">
+                          {(['mensal', 'anual'] as SubscriptionPeriod[]).map((p) => (
+                            <button
+                              key={p}
+                              type="button"
+                              onClick={() =>
+                                setSubscriptionPeriod(product.id, period === p ? undefined : p)
+                              }
+                              className={`px-2.5 py-1 rounded-md text-[10px] font-bold border transition-colors ${
+                                period === p
+                                  ? 'bg-[#2563EB] border-[#2563EB] text-white'
+                                  : 'bg-white border-[#E2E8F0] text-slate-600 hover:border-[#2563EB] hover:text-[#2563EB]'
+                              }`}
+                            >
+                              {p === 'mensal' ? 'Assinar mensal' : 'Assinar anual'}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
                       {/* Controls mobile */}
                       <div className="flex sm:hidden items-center justify-between mt-3 pt-3 border-t border-slate-100">
                         <div className="flex items-center border border-[#E2E8F0] rounded-lg">
                           <button
                             type="button"
-                            onClick={() => updateQuantity(product.id, quantity - 1)}
+                            onClick={() => updateQuantity(product.id, quantity - 1, period)}
                             className="p-1.5 text-slate-500 hover:text-[#1F3A5F]"
                             aria-label="Diminuir quantidade"
                           >
@@ -129,7 +161,7 @@ export default function Cart() {
                           <span className="px-3 text-xs font-bold text-[#1F3A5F]">{quantity}</span>
                           <button
                             type="button"
-                            onClick={() => updateQuantity(product.id, quantity + 1)}
+                            onClick={() => updateQuantity(product.id, quantity + 1, period)}
                             className="p-1.5 text-slate-500 hover:text-[#1F3A5F]"
                             aria-label="Aumentar quantidade"
                           >
@@ -147,7 +179,7 @@ export default function Cart() {
                       <div className="flex items-center border border-[#E2E8F0] rounded-lg bg-slate-50/50">
                         <button
                           type="button"
-                          onClick={() => updateQuantity(product.id, quantity - 1)}
+                          onClick={() => updateQuantity(product.id, quantity - 1, period)}
                           className="p-2 text-slate-500 hover:text-[#1F3A5F] transition-colors"
                           aria-label="Diminuir quantidade"
                         >
@@ -158,7 +190,7 @@ export default function Cart() {
                         </span>
                         <button
                           type="button"
-                          onClick={() => updateQuantity(product.id, quantity + 1)}
+                          onClick={() => updateQuantity(product.id, quantity + 1, period)}
                           className="p-2 text-slate-500 hover:text-[#1F3A5F] transition-colors"
                           aria-label="Aumentar quantidade"
                         >
@@ -176,7 +208,7 @@ export default function Cart() {
                       {/* Delete */}
                       <button
                         type="button"
-                        onClick={() => removeFromCart(product.id)}
+                        onClick={() => removeFromCart(product.id, period)}
                         className="p-2 text-slate-400 hover:text-[#DC2626] transition-colors rounded-lg hover:bg-red-50"
                         aria-label="Remover item"
                       >
@@ -187,7 +219,7 @@ export default function Cart() {
                     {/* Delete mobile */}
                     <button
                       type="button"
-                      onClick={() => removeFromCart(product.id)}
+                      onClick={() => removeFromCart(product.id, period)}
                       className="sm:hidden self-end text-xs text-red-600 flex items-center gap-1 mt-1 font-semibold"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -232,6 +264,11 @@ export default function Cart() {
                 </span>
               </div>
             </div>
+
+            <p className="text-[11px] text-slate-500 bg-slate-50 border border-slate-100 rounded-lg p-3">
+              <span className="font-bold text-[#1F3A5F]">Cupom de desconto:</span> o código pode ser
+              aplicado na próxima etapa, no checkout.
+            </p>
 
             <button
               type="button"
