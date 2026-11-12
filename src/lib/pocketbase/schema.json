@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-12T20:31:56.021Z",
+  "generatedAt": "2026-11-12T20:55:36.574Z",
   "collections": [
     {
       "name": "users",
@@ -29,14 +29,19 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         }
       ],
       "indexes": [
@@ -129,14 +134,19 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         }
       ],
       "indexes": [
@@ -173,14 +183,22 @@
           "type": "select",
           "required": true,
           "system": false,
-          "selectValues": ["pending", "paid", "cancelled"]
+          "selectValues": [
+            "pending",
+            "paid",
+            "cancelled"
+          ]
         },
         {
           "name": "payment_method",
           "type": "select",
           "required": true,
           "system": false,
-          "selectValues": ["credit_card", "pix", "boleto"]
+          "selectValues": [
+            "credit_card",
+            "pix",
+            "boleto"
+          ]
         },
         {
           "name": "total",
@@ -199,14 +217,19 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         }
       ],
       "indexes": [
