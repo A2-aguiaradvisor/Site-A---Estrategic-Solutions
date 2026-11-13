@@ -54,7 +54,8 @@ const StatItem: React.FC<{ stat: Stat; index: number; start: boolean }> = ({
   start,
 }) => {
   const reduced = usePrefersReducedMotion()
-  const value = useCountUp(stat.value, start)
+  // contagem demorada e calma (2s), em sintonia com o ritmo da home
+  const value = useCountUp(stat.value, start, 2000)
   const Icon = stat.icon
 
   return (

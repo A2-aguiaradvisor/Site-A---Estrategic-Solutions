@@ -185,7 +185,8 @@
   }
 
   .hero-pulse-dot {
-    animation: hero-pulse-dot 2.2s ease-in-out infinite;
+    /* ritmo calmo: pulso lento e sutil */
+    animation: hero-pulse-dot 5s ease-in-out infinite;
   }
 
   @keyframes hero-dash-flow {
@@ -194,8 +195,9 @@
     }
   }
 
+  /* Ritmo calmo/premium: fluxo lento nas linhas tracejadas */
   .hero-dash-flow {
-    animation: hero-dash-flow 1.6s linear infinite;
+    animation: hero-dash-flow 5.5s linear infinite;
   }
 
   @keyframes hub-rings {
@@ -217,7 +219,7 @@
   }
 
   .hub-rings {
-    animation: hub-rings 2.6s ease-out infinite;
+    animation: hub-rings 5.5s ease-out infinite;
   }
 
   @keyframes hero-fade-slide {

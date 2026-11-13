@@ -5,43 +5,68 @@ import { Reveal } from '@/components/home/Reveal'
 import { usePrefersReducedMotion } from '@/hooks/use-reveal'
 
 /**
- * Seção de vídeo financeiro: painel animado em loop ("dashboard sendo
- * construído") com KPIs que preenchem, barras que crescem e linha que se
- * desenha — seguido do vídeo institucional já existente (TechDemoVideoEmbed).
- * Respeita prefers-reduced-motion (painel renderizado estático).
+ * Seção "dashboard sendo construído": painel animado em loop lento — KPIs que
+ * preenchem, barras que crescem e linha que se desenha, cada fase levando
+ * vários segundos, com pausa longa e legível ao fim de cada ciclo.
+ *
+ * Ciclo total de 16s por fase de construção (8s montar → 6s pausa → 2s saída
+ * suave). Respeita prefers-reduced-motion (painel renderizado estático).
  */
 
 const DASH_BARS = [42, 58, 35, 72, 50, 88, 64, 95, 76]
 const DASH_POINTS = [30, 44, 38, 58, 52, 74, 66, 86, 80, 92]
 
-function useLoopProgress(active: boolean, durationMs = 3200) {
-  const [progress, setProgress] = useState(0)
+/** Fases do loop, em segundos (total = 16s). */
+const PHASE_BUILD = 8
+const PHASE_HOLD = 6
+const PHASE_EXIT = 2
+const CYCLE = PHASE_BUILD + PHASE_HOLD + PHASE_EXIT
+
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+
+/**
+ * Progresso calmo do painel: 0→1 durante PHASE_BUILD (eased), mantém 1 na
+ * pausa e volta a 0 suavemente na saída. Retornamos também um "fade" (1→0 na
+ * saída) para escurecer o painel inteiro sem piscar.
+ */
+function useLoopClock(active: boolean) {
+  const [{ progress, fade }, setClock] = useState({ progress: 1, fade: 1 })
 
   useEffect(() => {
     if (!active) {
-      setProgress(1)
+      setClock({ progress: 1, fade: 1 })
       return
     }
     let raf = 0
     const start = performance.now()
     const tick = (now: number) => {
-      const t = ((now - start) % durationMs) / durationMs
-      setProgress(t)
+      const t = ((now - start) % (CYCLE * 1000)) / 1000
+      let p: number
+      let f = 1
+      if (t < PHASE_BUILD) {
+        p = easeOutCubic(t / PHASE_BUILD)
+      } else if (t < PHASE_BUILD + PHASE_HOLD) {
+        p = 1
+      } else {
+        p = 1
+        f = 1 - (t - PHASE_BUILD - PHASE_HOLD) / PHASE_EXIT
+      }
+      setClock({ progress: p, fade: f })
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [active, durationMs])
+  }, [active])
 
-  return progress
+  return { progress, fade }
 }
 
 function AnimatedDashboardPanel() {
   const reduced = usePrefersReducedMotion()
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const progress = useLoopProgress(!reduced)
+  const { progress, fade } = useLoopClock(!reduced)
 
-  // painel canvas: linha de receita desenhando em loop + grid
+  // painel canvas: linha de receita desenhando em loop lento + grid
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -49,6 +74,7 @@ function AnimatedDashboardPanel() {
     if (!ctx) return
 
     const rect = canvas.getBoundingClientRect()
+    if (rect.width === 0 || rect.height === 0) return
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
     canvas.width = Math.round(rect.width * dpr)
     canvas.height = Math.round(rect.height * dpr)
@@ -58,7 +84,7 @@ function AnimatedDashboardPanel() {
     const h = rect.height
     const points = DASH_POINTS
     const stepX = w / (points.length - 1)
-    const reveal = reduced ? 1 : Math.min(1, progress * 1.4)
+    const reveal = reduced ? 1 : Math.min(1, progress * 1.25)
 
     ctx.clearRect(0, 0, w, h)
 
@@ -105,18 +131,23 @@ function AnimatedDashboardPanel() {
       if (i === 0) ctx.moveTo(x, y)
       else ctx.lineTo(x, y)
     }
-    ctx.lineWidth = 2.4
+    ctx.lineWidth = 2.2
     ctx.strokeStyle = '#C8D3E4'
-    ctx.shadowColor = 'rgba(225, 166, 62, 0.6)'
-    ctx.shadowBlur = 12
+    ctx.shadowColor = 'rgba(225, 166, 62, 0.45)'
+    ctx.shadowBlur = 10
     ctx.stroke()
     ctx.shadowBlur = 0
   }, [progress, reduced])
 
-  const shownBars = reduced ? DASH_BARS.length : Math.ceil(progress * DASH_BARS.length)
+  const shownBars = reduced
+    ? DASH_BARS.length
+    : Math.min(DASH_BARS.length, Math.ceil(progress * DASH_BARS.length))
 
   return (
-    <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-[#050D1C] shadow-2xl">
+    <div
+      className="relative rounded-2xl overflow-hidden border border-white/10 bg-[#050D1C] shadow-2xl transition-opacity duration-700 ease-out"
+      style={{ opacity: reduced ? 1 : fade }}
+    >
       {/* header bar */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-white/5 border-b border-white/10">
         <div className="flex items-center gap-1.5">
@@ -141,7 +172,7 @@ function AnimatedDashboardPanel() {
             return (
               <div
                 key={kpi.label}
-                className={`rounded-xl border border-white/10 bg-white/[0.03] p-3 transition-opacity duration-500 ${
+                className={`rounded-xl border border-white/10 bg-white/[0.03] p-3 transition-opacity duration-1000 ease-out ${
                   show ? 'opacity-100' : 'opacity-0'
                 }`}
               >
@@ -155,7 +186,7 @@ function AnimatedDashboardPanel() {
                 </div>
                 <div className="mt-2 h-1.5 rounded-full bg-white/5 overflow-hidden">
                   <div
-                    className="h-full rounded-full transition-all duration-700"
+                    className="h-full rounded-full transition-all duration-1000 ease-out"
                     style={{
                       width: show ? `${kpi.pct}%` : '0%',
                       background: kpi.color,
@@ -180,7 +211,7 @@ function AnimatedDashboardPanel() {
               return (
                 <div
                   key={i}
-                  className="flex-1 rounded-t-sm transition-all duration-500"
+                  className="flex-1 rounded-t-sm transition-all duration-1000 ease-out"
                   style={{
                     height: show ? `${b}%` : '0%',
                     background:
@@ -268,7 +299,7 @@ export function DashboardBuildShowcase() {
             </div>
           </Reveal>
 
-          {/* Right: animated dashboard demo ("vídeo" em loop) + vídeo institucional */}
+          {/* Right: animated dashboard demo ("vídeo" em loop lento) */}
           <Reveal direction="left" delay={150} className="lg:col-span-7 space-y-6">
             <AnimatedDashboardPanel />
           </Reveal>

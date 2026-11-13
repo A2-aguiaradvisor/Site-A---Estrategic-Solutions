@@ -4,7 +4,7 @@ import { HeroCanvasScene } from './HeroCanvasScene'
 import { useCountUp, usePrefersReducedMotion } from '@/hooks/use-reveal'
 import { cn } from '@/lib/utils'
 
-/** KPI com contagem animada quando entra em view (ou direto se reduced-motion). */
+/** KPI com contagem animada lenta (2,2s) quando entra em view (ou direto se reduced-motion). */
 function HeroKpi({
   value,
   prefix,
@@ -39,7 +39,7 @@ function HeroKpi({
   }, [])
 
   const animated = visible || reduced
-  const count = useCountUp(value, animated && !reduced, reduced ? 0 : 1400)
+  const count = useCountUp(value, animated && !reduced, reduced ? 0 : 2200)
   const display = count
 
   return (
@@ -87,7 +87,7 @@ export function HeroSection() {
             <p
               className={cn(
                 'text-xs font-bold uppercase tracking-[0.3em] text-[#E1A63E] mb-5',
-                !reduced && 'animate-[fade-slide-up_0.9s_ease-out_both]',
+                !reduced && 'animate-[fade-slide-up_1.5s_cubic-bezier(0.22,1,0.36,1)_both]',
               )}
             >
               Controladoria · Dados · Auditoria
@@ -96,7 +96,7 @@ export function HeroSection() {
             <h1
               className={cn(
                 'text-4xl sm:text-5xl lg:text-[3.6rem] font-black text-white leading-[1.05] tracking-tight',
-                !reduced && 'animate-[fade-slide-up_1.1s_ease-out_0.15s_both]',
+                !reduced && 'animate-[fade-slide-up_1.6s_cubic-bezier(0.22,1,0.36,1)_0.35s_both]',
               )}
             >
               Inteligência que move o seu negócio
@@ -105,7 +105,7 @@ export function HeroSection() {
             <p
               className={cn(
                 'mt-6 text-base sm:text-lg text-[#9FB2CF] leading-relaxed max-w-xl',
-                !reduced && 'animate-[fade-slide-up_1.1s_ease-out_0.3s_both]',
+                !reduced && 'animate-[fade-slide-up_1.6s_cubic-bezier(0.22,1,0.36,1)_0.7s_both]',
               )}
             >
               Da planilha ao dashboard executivo: estruture a controladoria, domine os dados e
@@ -115,7 +115,7 @@ export function HeroSection() {
             <div
               className={cn(
                 'mt-9 flex flex-wrap items-center gap-4',
-                !reduced && 'animate-[fade-slide-up_1.1s_ease-out_0.45s_both]',
+                !reduced && 'animate-[fade-slide-up_1.6s_cubic-bezier(0.22,1,0.36,1)_1.05s_both]',
               )}
             >
               <Link
@@ -136,7 +136,7 @@ export function HeroSection() {
             <div
               className={cn(
                 'mt-14 grid grid-cols-3 gap-6 border-t border-[#1B2A45] pt-8',
-                !reduced && 'animate-[fade-slide-up_1.1s_ease-out_0.6s_both]',
+                !reduced && 'animate-[fade-slide-up_1.6s_cubic-bezier(0.22,1,0.36,1)_1.4s_both]',
               )}
             >
               <HeroKpi value={4} label="Frentes de atuação" accent="gold" />

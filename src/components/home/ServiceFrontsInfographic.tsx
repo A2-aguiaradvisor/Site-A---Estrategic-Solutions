@@ -231,7 +231,7 @@ export const ServiceFrontsInfographic: React.FC = () => {
                   style={
                     reduced
                       ? undefined
-                      : { animation: `hero-fade-slide 0.4s ease ${idx * 0.08}s both` }
+                      : { animation: `hero-fade-slide 0.9s ease-out ${idx * 0.18}s both` }
                   }
                 >
                   <CheckCircle2
